@@ -1,0 +1,279 @@
+.navbar {
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the bottom of the page */
+    width: 100%; /* Full width */
+}
+.btn-secondary {
+    background-color: #cfdef5;
+}
+.btn-green  {
+    z-index: 1;
+    background-color: #8ec641;
+    color: #000;
+}
+.btn-success  {
+    z-index: 1;
+    background-color: #8ec641;
+    color: #000;
+    border: #8ec641;
+}
+.btn-success:hover
+{
+    z-index: 1;
+    background-color: #8ec641;
+    color: #000;
+}
+.w3-sidebar {
+    height: 100%;
+    width: 250px;
+    background-color: #fff;
+    position: fixed !important;
+    z-index: 1;
+    overflow: auto;
+}
+.bg-navbar-green {
+    position: fixed;
+    width: 100%;
+
+    top: 0;
+    z-index: 1;
+    background-color: #8ec641;
+}
+.bg-sidebar-green {
+    background-color: #9ebb77;
+}
+
+/* Fixed sidenav, full height */
+.sidenav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+/* Style the sidenav links and the dropdown button */
+.dropdown-btn {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    z-index: 1;
+    color: #818181;
+    display: block;
+    border: none;
+    background: #1a1e24;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+}
+
+/* On mouse-over */
+/* .dropdown-btn:hover {
+    color: #f1f1f1;
+    text-decoration: none;
+} */
+
+/* Main content */
+
+/* Add an active class to the active dropdown button */
+.dropdown-btn a:hover {
+    color: #f1f1f1;
+    text-decoration: none;
+}
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+    display: none;
+    background-color: #1a1e24;
+    padding-left: 8px;
+}
+
+/* Optional: Style the caret down icon */
+.fa-caret-down {
+    float: right;
+    padding-right: 8px;
+}
+
+body {
+    background: #262626;
+}
+
+.thead-green {
+    background-color: #8ec641;
+}
+.line {
+    border: 3px solid #000;
+    color: #000;
+}
+.thead-dark {
+    background-color: #9ebb77;
+}
+td,
+th {
+    text-align: center;
+    border-bottom: 3px solid #000;
+}
+
+.th1 {
+    text-align: left;
+}
+table {
+    border: 3px solid #000;
+}
+.font_green {
+    color: #8ec641;
+}
+
+.page-link {
+    position: relative;
+
+    display: block;
+
+    padding: 0.5rem 0.75rem;
+
+    margin-left: -1px;
+
+    line-height: 1.25;
+
+    color: #000;
+
+    background-color: #9ebb77;
+
+    border: 1px solid #8ec641;
+    z-index: 0;
+}
+
+.page-item.disabled .page-link {
+    color: #000;
+
+    pointer-events: none;
+
+    cursor: auto;
+
+    background-color: #9ebb77;
+
+    border-color: #8ec641;
+}
+
+.page-item.active .page-link {
+    /* z-index: 1; */
+    z-index: 0;
+    color: #000;
+
+    background-color: #8ec641;
+
+    border-color: #8ec641;
+}
+
+.page-link:focus,
+.page-link:hover {
+    color: #000;
+
+    text-decoration: none;
+
+    background-color: #8ec641;
+
+    border-color: #8ec641;
+}
+.cart_quantity_button a {
+    background: #f0f0e9;
+    color: #696763;
+    display: inline-block;
+    font-size: 16px;
+    height: 28px;
+    overflow: hidden;
+    text-align: center;
+    width: 35px;
+    float: left;
+}
+
+.cart_quantity_input {
+    color: #696763;
+    float: left;
+    font-size: 16px;
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+}
+.total_area span {
+    float: right;
+}
+
+.total_area ul li {
+    background: #e6e4df;
+    color: #696763;
+    margin-top: 10px;
+    padding: 7px 20px;
+    color: #000;
+    background-color: #8ec641;
+}
+
+.numbertext {
+    text-align: center;
+    background-color: hsla(120, 100%, 50%, 0);
+    color: #8ec641;
+}
+
+.kiki .droplabel label b {
+    color: #000;
+    padding: 30px;
+    font-size: 16px;
+    border: none;
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: bold;
+}
+a:hover .dropa {
+    color: #fff;
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    text-decoration: none;
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #000;
+    min-width: 150px;
+    margin-top: -20px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: #818181;
+    background-color: #1a1e24;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #1a1e24;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    color: #818181;
+}
+.countall{
+    color: #8ec641;
+    text-align: right;
+    margin-top: 25px;
+    font-size: 18px;
+}

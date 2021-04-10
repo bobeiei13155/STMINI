@@ -1,0 +1,51 @@
+/* your styles go here */
+
+.table > tbody > tr > td {
+    text-align: center;
+    vertical-align: middle;
+}
+.noBorder {
+    border: none !important;
+}
+.txtcenter {
+    vertical-align: middle;
+}
+
+.table > thead {
+    color: #fff;
+    background-color: #343a40;
+    border-color: #454d55;
+}
+tr > td > input[type="text"]:disabled {
+    background: #ffffff;
+    border: none;
+}
+
+tr > td > input[type="text"]:read-only {
+    background: #ffffff;
+    border: none;
+}
+.noHover {
+    background-color: unset !important;
+    color: unset !important;
+}
+
+input.largerCheckbox {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    padding-bottom: 25px;
+    position: static;
+}
+
+.a1 {
+    background-color: #c1c1c1;
+    color: black;
+    border-radius: 10px 0px 0px 10px;
+}
+.a2 {
+    background-color: #c1c1c1;
+    color: black;
+    border-radius: 0px 10px 10px 0px;
+}
+
