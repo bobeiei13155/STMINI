@@ -256,7 +256,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $Id_Product)
     {
-
+        // dd($request);
         $request->validate([
             'Name_Product' => 'required',
             'Category_Id' => 'required',
@@ -280,7 +280,7 @@ class ProductController extends Controller
             }
             $request->image->storeAs("public/Products_image/", $products->Img_Product);
         }
-
+        $products = Product::find($Id_Product);
         $products->Name_Product = $request->Name_Product;
         $products->Category_Id = $request->Category_Id;
         $products->Brand_Id = $request->Brand_Id;

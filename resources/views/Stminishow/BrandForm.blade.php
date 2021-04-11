@@ -32,7 +32,7 @@
             <div class="card-header">
                 <div class="row">
                     <!-- <label for="Name_Category" >ชื่อประเภทสินค้า</label> -->
-                    <form action="/Stminishow/createBrand" method="GET" enctype="multipart/form-data">
+                    <form action="/Stminishow/createBrand" method="post" enctype="multipart/form-data">
                         <div class="col">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="Name_Brand" id="Name_Brand" placeholder="ชื่อยี่ห้อสินค้า" style="width: 300px;" required>

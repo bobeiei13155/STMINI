@@ -208,7 +208,7 @@
                             <thead>
                                 <tr>
                                     <th>ชือโปรโมชั่น</th>
-                                    <th>ชื่อสินค้า</th>
+                                    <th>ชื่อยี่ห้อ</th>
                                     <th>วันเริ่มต้น</th>
                                     <th>วันสิ้นสุด</th>
                                     <th>รายละเอียด</th>
@@ -237,7 +237,7 @@
             <div role="document" class="modal-dialog modal-lg">
                 <div class="modal-content" style="width: auto;">
                     <div class="modal-header">
-                        <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#6586FA; padding-right: 8px; "></i>รายละเอียดโปรโมชั่นยอดชำระ</h5>
+                        <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-fire-alt" style="color:#6586FA; padding-right: 8px; "></i>รายละเอียดโปรโมชั่นยอดชำระ</h5>
                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                     </div>
                     <div class="modal-body">
@@ -371,7 +371,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">ราคารวม :</span>
                                     </div>
-                                    <input type="text" class="form-control text-center" name="Receipt_date" id="Receipt_date" value="0.00" style="background-color: #E8ECEE;  " readonly>
+                                    <input type="text" class="form-control text-center total" name="total" id="total" value="0.00" style="background-color: #E8ECEE;  " readonly>
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
                                     </div>
@@ -385,7 +385,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">ส่วนลดสมาชิก :</span>
                                     </div>
-                                    <input type="text" class="form-control text-center" name="Receipt_date" id="Receipt_date" value="-" style="background-color: #E8ECEE;  " readonly>
+                                    <input type="text" class="form-control text-center discount_member" name="discount_member" id="discount_member" value="-" style="background-color: #E8ECEE;  " readonly>
                                     <div class="input-group-prepend ">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px; width:55px;"> %</span>
                                     </div>
@@ -397,7 +397,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">ยอดชำระ :</span>
                                     </div>
-                                    <input type="text" class="form-control text-center total" name="total" id="total" value="0.00" style="background-color: #E8ECEE; height:40px " readonly>
+                                    <input type="text" class="form-control text-center payment " value="0.00" name="payment" id="payment" style="background-color: #E8ECEE; height:40px " readonly>
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
                                     </div>
@@ -496,6 +496,7 @@
                         @if($product->Id_Product == $promotion->Id_Product)
                         <button type="button" class="btn btn-warning ID_Promotion_Product " id="{{$promotion->Id_Promotion}} " style="border-radius: 5px;  " data-toggle="modal" data-target="#myModal_Promotion_De_1"> <i class="fas fa-eye"></i></button>
                         <input type="hidden" value="{{$promotion->Id_Promotion}} " name="Id_Promotion_Product_inp[]">
+                        <input type="hidden" value="{{$product->Price}} " name="Price_Product[]">
                         @endif
                         @endforeach
                     </td>
@@ -503,6 +504,7 @@
 
 
                     <td> <button type="button" class="btn btn-primary buttonID_Product" id="{{$product->Id_Product}}" style="border-radius: 5px; width: 120px; " data-toggle="modal" data-target="#myModalOffer"> <i class="fas fa-cart-arrow-down" style="margin-right: 5px;"></i> เลือกสินค้า</button></td>
+                    <input type="hidden" value="{{$product->Price}} " name="Price_Product[]">
                     </tr>
                     @endforeach
 
@@ -575,8 +577,28 @@
 
         var enabled = document.getElementById('radioCustom2').checked;
 
+        if (enabled == false) {
+            document.getElementById('member').value = "";
+            document.getElementById('id_member').value = "";
+            document.getElementById('discount_member').value = "-";
+        }
+
         document.getElementById('member').readonly = !enabled;
         document.getElementById('s_member').disabled = !enabled;
+        let total_ = sumTotal();
+
+        $('#total').val(total_.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+        let payment_ = sumPayment();
+        $('#payment').val(payment_.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+
+        // (document.getElementById('discount_member') = !enabled)
+
 
 
     }
@@ -599,9 +621,33 @@
             success: function(result) {
 
                 $('input[name="member"]').val(result);
+
             }
         })
 
+        $.ajax({
+            url: "{{route('sell.Select_Discount')}}",
+            method: "POST",
+            data: {
+                Id_Member: Id_Member,
+                _token: _token
+            },
+            success: function(result) {
+
+                $('input[name="discount_member"]').val(result);
+                let total_ = sumTotal();
+
+                $('#total').val(total_.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }));
+                let payment_ = sumPayment();
+                $('#payment').val(payment_.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }));
+            }
+        })
 
 
     });
@@ -631,14 +677,59 @@
 
     });
 
-    $(document).on("click", ".buttonID_Product", function() {
 
+
+
+    function sumTotal() {
+        var total_ = 0;
+        $('.total_cost').each(function() {
+            total_ += parseFloat($(this).val());
+        });
+        return total_;
+    }
+
+    function sumPayment() {
+        var payment_ = 0;
+        $('.total_cost').each(function() {
+            payment_ += parseFloat($(this).val());
+        });
+
+        discount_member = document.getElementById("discount_member").value;
+        if (isNaN(discount_member)) {
+            discount_member_ = 0;
+        } else {
+            discount_member_ = parseFloat(discount_member);
+        }
+
+        var payment_show = payment_ - ((payment_ * discount_member_) / 100);
+        payment_show = Math.ceil(payment_show);
+
+
+
+        $('.Id_Brand').each(function() {
+            alert($(this).val());
+        });
+
+
+        return payment_show;
+    }
+
+    $(document).on("click", ".buttonID_Product", function() {
+        var chk1 = false;
         var value = $(this).parent().parent();
         var Id_Product = $(this).attr("Id");
 
         var _token = $('input[name="_token"]').val();
         var test = $(this).closest('tr')
         let Id_Promotion_Product = test.find("input[name='Id_Promotion_Product_inp[]']").val();
+
+        $('.Id_Product_Sell').each(function() {
+            if (Id_Product == $(this).val()) {
+                swal('เลือกสินค้าซ้ำ');
+                chk1 = true;
+                return false;
+            };
+        });
 
 
         var Amount_Sell = value.find("input[name='Amount_Sell[]']").val();
@@ -647,54 +738,83 @@
             swal('สินค้าหมด');
             exit();
         }
+        if (chk1 == false) {
+            if (typeof Id_Promotion_Product === "undefined") {
+                $.ajax({
+                    url: "{{route('sell.select_Id_Product')}}",
+                    method: "POST",
+                    data: {
+                        Id_Product: Id_Product,
+                        Amount_Sell: Amount_Sell,
+                        _token: _token
+                    },
+                    success: function(result) {
+                        $('.show_product').append(result);
+                        let total_ = sumTotal();
 
-        if (typeof Id_Promotion_Product === "undefined") {
-            $.ajax({
-                url: "{{route('sell.select_Id_Product')}}",
-                method: "POST",
-                data: {
-                    Id_Product: Id_Product,
-                    Amount_Sell: Amount_Sell,
-                    _token: _token
-                },
-                success: function(result) {
-                    $('.show_product').append(result);
-                }
-            });
-        } else {
-            // swal(Id_Promoiton_Product);
-            $.ajax({
-                url: "{{route('sell.select_Id_Product')}}",
-                method: "POST",
-                data: {
-                    Id_Product: Id_Product,
-                    Amount_Sell: Amount_Sell,
-                    _token: _token
-                },
-                success: function(result) {
-                    $('.show_product').append(result);
-                }
-            });
+                        $('#total').val(total_.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }));
+                        let payment_ = sumPayment();
+                        $('#payment').val(payment_.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }));
 
-            $.ajax({
-                url: "{{route('sell.select_Promotion_Product')}}",
-                method: "POST",
-                data: {
-                    Id_Promotion_Product: Id_Promotion_Product,
-                    _token: _token
-                },
-                success: function(result) {
-                    $('.show_premium_product').append(result);
-                }
-            });
+                    }
+                });
+            } else {
+                // swal(Id_Promoiton_Product);
+                $.ajax({
+                    url: "{{route('sell.select_Id_Product')}}",
+                    method: "POST",
+                    data: {
+                        Id_Product: Id_Product,
+                        Amount_Sell: Amount_Sell,
+                        _token: _token
+                    },
+                    success: function(result) {
+                        $('.show_product').append(result);
+                        let total_ = sumTotal();
 
-        }
+                        $('#total').val(total_.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }));
+                        let payment_ = sumPayment();
+                        $('#payment').val(payment_.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        }));
+
+                    }
+                });
+
+                $.ajax({
+                    url: "{{route('sell.select_Promotion_Product')}}",
+                    method: "POST",
+                    data: {
+                        Id_Promotion_Product: Id_Promotion_Product,
+                        _token: _token
+                    },
+                    success: function(result) {
+                        $('.show_premium_product').append(result);
+                    }
+                });
+
+            }
+        };
+
         // var job = $('#' + penis_test + ' td:nth-child(2)').html();
 
 
 
 
     });
+
+
+
 
     $(document).on("change", ".the_input_approve", function() {
 
@@ -709,7 +829,33 @@
         // test.find('.total_cost').val(input_cost * input_approve);
         // new Intl.NumberFormat().format()
         // .toLocaleString()
+        var Id_Product = $('.Id_Product_Sell').val();
 
+        var Show_Amount = $('.Show_Amount_Premium').val();
+        var Lot_Premium = $('.Lot_Premium').val();
+
+        $('.Id_Product_Remove').each(function() {
+            var Id_Product_Remove = $(this).val();
+
+            if (Show_Amount >= Lot_Premium) {
+                swal('สินค้าของแถมหมด');
+                $('#Show_Amount_Premium').val(Lot_Premium);
+            } else {
+                if (Id_Product == Id_Product_Remove) {
+                    var Amount_Premium = $('.Premium_Pro').val();
+
+                    // alert();
+                    $('#Show_Amount_Premium').val(input_approve * Amount_Premium);
+                }
+            };
+
+
+
+
+        });
+
+
+        // alert(Id_Product);
 
         test.find('.total_cost_s').val((input_approve * input_cost).toLocaleString(undefined, {
             minimumFractionDigits: 2,
@@ -717,21 +863,20 @@
         }));
         test.find('.total_cost').val((input_approve * input_cost));
 
-        var cnt = 0;
+        let total_ = sumTotal();
 
-        $('.total_cost').each(function() {
-
-            var total = parseFloat($(this).val());
-
-            cnt += total;
-        });
-
-
-
-        $('#total').val(cnt.toLocaleString(undefined, {
+        $('#total').val(total_.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         }));
+        let payment_ = sumPayment();
+        $('#payment').val(payment_.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+
+
+
 
     });
 
@@ -764,7 +909,7 @@
 
         var Id_Promotion = $(this).attr("Id");
         // swal(Id_Promotion);
-        var _token = $('input[name="_token"]').val();
+        var _token = $('input[name= "_token"]').val();
         // var job = $('#' + penis_test + ' td:nth-child(2)').html();
 
         $.ajax({
@@ -806,6 +951,37 @@
         });
 
 
+
+    });
+
+    $(document).on('click', '.remove', function() {
+
+        Id_Product_Sells = $(this).val();
+        // alert(Id_Product_Sells);
+        $('.Id_Product_Remove').each(function() {
+            var Id_Product_Remove = $(this).val();
+
+            if (Id_Product_Sells == Id_Product_Remove) {
+                $(this).parent().parent().remove();
+            };
+        });
+
+
+        // if (Id_Product_Sells == Id_Product_Remove) {
+        //     // $('.Id_Product_Remove').parent().remove();
+        // }
+        $(this).parent().parent().remove();
+        let total_ = sumTotal();
+
+        $('#total').val(total_.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+        let payment_ = sumPayment();
+        $('#payment').val(payment_.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
 
     });
 </script>

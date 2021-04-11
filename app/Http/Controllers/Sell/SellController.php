@@ -47,28 +47,35 @@ class SellController extends Controller
     {
         $Id_Promotion_Product = $request->Id_Promotion_Product;
 
-        $Id_Product_Promotions = DB::table('promotion_prods')->select('Id_Product')->where('Id_Promotion', '=', $Id_Promotion_Product)->groupBy('Id_Product')->first();
+        $Id_Product_ = DB::table('promotion_prods')->select('Id_Product')->where('Id_Promotion', '=', $Id_Promotion_Product)->groupBy('Id_Product')->first();
         // dd($Id_Product_Promotion);
         // $Id_Product = $request->Id_Product;
-        $Id_Premium_Promotions = DB::table('promotion_prods')->join('premium_pros', 'premium_pros.Id_Premium_Pro', '=', 'promotion_prods.Id_Premium_Pro')
-            ->select('premium_pros.Name_Premium_Pro', 'promotion_prods.Amount_Premium_Pro', 'premium_pros.Id_Premium_Pro', 'premium_pros.Img_Premium_Pro')->where('Id_Promotion', '=', $Id_Promotion_Product)->get();
+        $Id_Premium_Promotions = DB::select(DB::raw("SELECT `premium_pros`.`Name_Premium_Pro`
+        , `promotion_prods`.`Amount_Premium_Pro` as `Premium_Pro`
+        , `premium_pros`.`Amount_Premium_Pro` as `Lot_Premium`
+        , `premium_pros`.`Id_Premium_Pro`, `premium_pros`.`Img_Premium_Pro` 
+        from `promotion_prods` 
+        inner join `premium_pros` on `premium_pros`.`Id_Premium_Pro` = `promotion_prods`.`Id_Premium_Pro` 
+        where `Id_Promotion` = '" . $Id_Promotion_Product . "'"));
         // $q = DB::table('products')
         //     ->join('categories', 'categories.Id_Category', '=', 'products.Category_Id')
         //     ->join('brands', 'brands.Id_Brand', '=', 'products.Brand_Id')
         //     ->select('products.Name_Product', 'categories.Name_Category', 'brands.Name_Brand', 'products.Price', 'products.Img_Product')
         //     ->where('products.Id_Product', '=',  $Id_Product)
         //     ->get();
+
+        // dd($Id_Premium_Promotions);
         // dd($Id_Premium_Promotions);
 
         $Id_Product_Promotions = DB::table('lot_lists')
             ->RightJoin('products', 'products.Id_Product', '=', 'lot_lists.Id_Product')
             ->join('categories', 'categories.Id_Category', '=', 'products.Category_Id')
             ->join('brands', 'brands.Id_Brand', '=', 'products.Brand_Id')
-            ->select('products.Id_Product', 'products.Amount_Preorder', 'products.Name_Product', 'categories.Name_Category', 'brands.Name_Brand', 'products.Price', 'products.Img_Product', DB::raw('sum(lot_lists.Amount_Lot) as Amount_Lot'))->where('products.Id_Product', '=',  $Id_Product_Promotions->Id_Product)
+            ->select('products.Id_Product', 'products.Amount_Preorder', 'products.Name_Product', 'categories.Name_Category', 'brands.Name_Brand', 'products.Price', 'products.Img_Product', DB::raw('sum(lot_lists.Amount_Lot) as Amount_Lot'))->where('products.Id_Product', '=',  $Id_Product_->Id_Product)
             ->groupBy('products.Id_Product', 'products.Amount_Preorder', 'products.Name_Product', 'categories.Name_Category', 'brands.Name_Brand', 'products.Price', 'products.Img_Product')->orderBy('Id_Product')
             ->get();
 
-        // dd($Id_Premium_Promotions);
+
 
         foreach ($Id_Product_Promotions as  $row) {
             $Amount_Lot =  $row->Amount_Lot - $row->Amount_Preorder;
@@ -82,7 +89,8 @@ class SellController extends Controller
             echo "</script>";
             exit();
         } else {
-            $output = '<table class="table table-hover text-center " >';
+            $output = '<table class="table table-hover text-center "  >';
+
 
             foreach ($Id_Premium_Promotions as  $row) {
                 $output .= '<tr>';
@@ -95,12 +103,18 @@ class SellController extends Controller
                 // $output .= ' <td scope="row" width="5%"  > <label type="button" class="form-control "    style="background-color: #F0B71A;border-color: #F0B71A; color:#FFF;font-size:16px; border-radius: 5px;" disabled><i class="fas fa-star" style="color:#FFF"></i></label>';
                 // $output .= '  </td>';
 
-                $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover"  value="' . $row->Amount_Premium_Pro . '"  style="" readonly></td>';
+                $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover Show_Amount_Premium"  value="' . $row->Premium_Pro . '" id="Show_Amount_Premium" style="" readonly>';
+                $output .= ' <input type="hidden" class="form-control text-center noHover Premium_Pro"  value="' . $row->Premium_Pro . '"  style="" readonly> ';
+                $output .= ' <input type="hidden" class="form-control text-center noHover Lot_Premium"  value="' . $row->Lot_Premium . '"  style="" readonly> ';
+                $output .= ' </td>';
 
                 // });
-
-                $output .= ' </tr>';
+                $output .= '<td  style="display :none" ><input type="text" class="form-control text-center noHover Id_Product_Remove"  value="' . $Id_Product_->Id_Product . '" name="Id_Product_Remove[]" ></td>  ';
             }
+
+            $output .= '</tr>';
+            $output .= '</table>';
+            // dd($Id_Promotion_Product);
 
             echo $output;
         }
@@ -404,6 +418,18 @@ class SellController extends Controller
         echo $name_member;
     }
 
+    public function Select_Discount(Request $request)
+    {
+        $Id_Member = $request->Id_Member;
+
+        $Q_discount = DB::table('members')->select('categorymembers.Discount_Cmember')->join('categorymembers', 'categorymembers.Id_Cmember', '=', 'members.Cmember_Id')->where('Id_Member', '=', $Id_Member)->get();
+
+        foreach ($Q_discount as $row) {
+            $Discount_Cmember =  $row->Discount_Cmember;
+        }
+        echo $Discount_Cmember;
+    }
+
     public function select_id_member(Request $request)
     {
 
@@ -454,11 +480,11 @@ class SellController extends Controller
 
             $output .= ' <td scope="row" width="9%" ><input type="text" class="form-control text-center noHover"  value="' . $row->Name_Product . '"  style="" disabled></td>';
 
-            $output .= '  <input type="hidden" class="form-control text-center noHover"  value="' . $row->Id_Product . '" name="Id_Product_Sell[]" >';
+            $output .= '  <input type="hidden" class="form-control text-center noHover Id_Product_Sell"  value="' . $row->Id_Product . '" name="Id_Product_Sell[]" >';
 
 
             $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover"  value="' . $row->Name_Brand . '" name="Amount_Remain[]" readonly>';
-
+            $output .= ' <input type="hidden" class="form-control text-center noHover Id_Brand"  value="' . $row->Id_Brand . '" name="Id_Brand[]">';
             $output .= ' </td>';
             $output .= ' <td scope="row" width="5%" >';
 
@@ -469,7 +495,7 @@ class SellController extends Controller
             $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover total_cost_s"  value="' . $Price . '" " readonly>
                             <input type="hidden" class="form-control text-center noHover  total_cost"  value="' . $row->Price . '" >         ';
             $output .= ' </td> ';
-            $output .= ' <td scope="row" width="5%" > <button type="button" class="btn btn-danger remove " id=""  style="border-radius: 5px; width: 60px; "> <i class="fas fa-trash" style="margin-right: 5px;"></i>  </button></td>';
+            $output .= ' <td scope="row" width="5%" > <button type="button" class="btn btn-danger remove " id="" value="' . $row->Id_Product . '"  style="border-radius: 5px; width: 60px; "> <i class="fas fa-trash" style="margin-right: 5px;"></i>  </button></td>';
             // });
 
             $output .= ' </tr>';

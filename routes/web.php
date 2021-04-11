@@ -220,3 +220,4 @@ Route::post('/Sell/createSell/select_Id_Product', 'Sell\SellController@select_Id
 Route::post('/Sell/createSell/Detail_Promotion_Products', 'Sell\SellController@Detail_Promotion_Products')->name('sell.Detail_Promotion_Products');
 Route::post('/Sell/createSell/select_Promotion_Product', 'Sell\SellController@select_Promotion_Product')->name('sell.select_Promotion_Product');
 Route::post('/Sell/createSell/Detail_Promotion_Payments', 'Sell\SellController@Detail_Promotion_Payments')->name('sell.Detail_Promotion_Payments');
+Route::post('/Sell/createSell/Select_Discount', 'Sell\SellController@Select_Discount')->name('sell.Select_Discount');

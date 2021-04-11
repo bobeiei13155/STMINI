@@ -70,6 +70,7 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
         $GenId = DB::table('brands')->max('Id_Brand');
 
         if (is_null($GenId)) {
