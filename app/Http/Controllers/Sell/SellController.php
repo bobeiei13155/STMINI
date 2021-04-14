@@ -43,6 +43,68 @@ class SellController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function select_promotion_payment(Request $request)
+    {
+        $value = $request->sub_Id_Brand;
+
+        $promotionpays = DB::select(DB::raw("SELECT
+        `promotionpays`.`Id_Promotion`,
+        `promotionpays`.`Name_Promotion`,
+        `promotionpays`.`Sdate_Promotion`,
+        `promotionpays`.`Edate_Promotion`,
+        `promotionpays`.`Payment_Amount`,
+         `promotion_payments`.`Amount_Premium_Pro` as `Premium_Pro`,
+         `premium_pros`.`Amount_Premium_Pro` as `Lot_Premium`,
+         `premium_pros`.`Id_Premium_Pro`,
+         `premium_pros`.`Img_Premium_Pro`,
+         `premium_pros`.`Name_Premium_Pro`,
+        `brands`.`Id_Brand`,
+        `brands`.`Name_Brand` 
+    FROM
+        `promotionpays`
+        INNER JOIN `brands` ON `brands`.`Id_Brand` = `promotionpays`.`Brand_Id`
+        INNER JOIN `promotion_payments` ON `promotionpays`.`Id_Promotion` = `promotion_payments`.`Id_Promotion`
+        INNER JOIN `premium_pros` ON `premium_pros`.`Id_Premium_Pro` = `promotion_payments`.`Id_Premium_Pro`
+                     WHERE   `promotionpays`.`Brand_Id` = '" . $value . "'
+                       AND        `promotion_payments`.`Amount_Premium_Pro` < `premium_pros`.`Amount_Premium_Pro`	
+
+    "));
+
+        $output = '<table class="table table-hover text-center "  >';
+
+
+        foreach ($promotionpays as  $row) {
+            $output .= '<tr>';
+            $output .= '<td scope="row" width="6%"><img src="http://127.0.0.1:8000/storage/PremiumPro_image/' . $row->Img_Premium_Pro . '" alt="" width="50px" height="60px"></td>';
+
+
+            $output .= ' <td scope="row" width="9%" ><input type="text" class="form-control text-center noHover"  value="' . $row->Name_Premium_Pro . '"  style="" disabled></td>';
+
+            $output .= '  <input type="hidden" class="form-control text-center noHover"  value="' . $row->Id_Premium_Pro . '" name="Id_Premium_Pro_Sell[]" >';
+
+
+            $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover Show_Amount_Premium"  value="' . $row->Premium_Pro . '" id="Show_Amount_Premium" style="" readonly>';
+            $output .= ' <input type="hidden" class="form-control text-center noHover Premium_Pro"  value="' . $row->Premium_Pro . '"  style="" readonly> ';
+            $output .= ' <input type="hidden" class="form-control text-center noHover Lot_Premium"  value="' . $row->Lot_Premium . '"  style="" readonly> ';
+            $output .= ' <input type="hidden" class="form-control text-center noHover Id_Brand_Pay_Remove"  value="' . $value . '"  style="" readonly> ';
+            $output .= ' </td>';
+            $output .= ' <td scope="row" width="1%"  > <label type="button" class="form-control "    style="background-color: #6586FA;border-color: #6586FA; color:#FFF;font-size:14px; border-radius: 5px;" disabled><i class="fas fa-fire-alt" style="color:#FFF"></i></label>';
+            $output .= '  </td>';
+            // });
+            $output .= '<td  style="display :none" ><input type="text" class="form-control text-center noHover Id_Promotion_Pay"  value="' . $row->Id_Promotion . '" name="Id_Promotion_Pay[]" ></td>  ';
+        }
+
+        $output .= '</tr>';
+        $output .= '</table>';
+        // dd($Id_Promotion_Product);
+
+        echo $output;
+        // dd($promotionpays);
+    }
+
+
+
     public function select_Promotion_Product(Request $request)
     {
         $Id_Promotion_Product = $request->Id_Promotion_Product;
@@ -99,7 +161,7 @@ class SellController extends Controller
 
                 $output .= ' <td scope="row" width="9%" ><input type="text" class="form-control text-center noHover"  value="' . $row->Name_Premium_Pro . '"  style="" disabled></td>';
 
-                $output .= '  <input type="hidden" class="form-control text-center noHover"  value="' . $row->Id_Premium_Pro . '" name="Id_Premium_Pro_Sell[]" >';
+                $output .= '  <input type="hidden" class="form-control text-center noHover "  value="' . $row->Id_Premium_Pro . '" name="Id_Premium_Pro_Sell[]" >';
                 // $output .= ' <td scope="row" width="5%"  > <label type="button" class="form-control "    style="background-color: #F0B71A;border-color: #F0B71A; color:#FFF;font-size:16px; border-radius: 5px;" disabled><i class="fas fa-star" style="color:#FFF"></i></label>';
                 // $output .= '  </td>';
 
@@ -107,7 +169,7 @@ class SellController extends Controller
                 $output .= ' <input type="hidden" class="form-control text-center noHover Premium_Pro"  value="' . $row->Premium_Pro . '"  style="" readonly> ';
                 $output .= ' <input type="hidden" class="form-control text-center noHover Lot_Premium"  value="' . $row->Lot_Premium . '"  style="" readonly> ';
                 $output .= ' </td>';
-
+                $output .= ' <td scope="row" width="1%"  > <label type="button" class="form-control "    style="background-color: #F0B71A;border-color: #F0B71A; color:#FFF;font-size:14px; border-radius: 5px;" disabled><i class="fas fa-star" style="color:#FFF"></i></label>';
                 // });
                 $output .= '<td  style="display :none" ><input type="text" class="form-control text-center noHover Id_Product_Remove"  value="' . $Id_Product_->Id_Product . '" name="Id_Product_Remove[]" ></td>  ';
             }
@@ -249,7 +311,7 @@ class SellController extends Controller
         $output .= ' <div class="input-group col-sm-6 ">';
         $output .= ' <div class="input-group-prepend"> ';
         $output .= '  <span class="input-group-text a1" id="inputGroup-sizing-default">รหัสโปรโมชั่นยอดชำระ :</span> </div>';
-        $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Product" id="Ip_Id_Promotion_Product" value="' . $Id_Promotion . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
+        $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Payment" id="Ip_Id_Promotion_Payment" value="' . $Id_Promotion . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
         $output .= '  </div>';
 
         foreach ($promotionpays as $row) {
@@ -257,7 +319,7 @@ class SellController extends Controller
             $output .= ' <div class="input-group col-sm-6 ">';
             $output .= ' <div class="input-group-prepend"> ';
             $output .= '  <span class="input-group-text a1" id="inputGroup-sizing-default">ชื่อโปรโมชั่นยอดชำระ :</span> </div>';
-            $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Product" id="Ip_Id_Promotion_Product" value="' . $row->Name_Promotion . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
+            $output .= '  <input type="text" class="form-control" name="Ip_Name_Promotion_Payment" id="Ip_Id_Promotion_Payment" value="' . $row->Name_Promotion . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
             $output .= '  </div>';
             $output .= '  </div>';
             $output .= '  <br>';
@@ -265,13 +327,15 @@ class SellController extends Controller
             $output .= ' <div class="input-group col-sm-6 ">';
             $output .= ' <div class="input-group-prepend"> ';
             $output .= '  <span class="input-group-text a1" id="inputGroup-sizing-default">ยี่ห้อ :</span> </div>';
-            $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Product" id="Ip_Id_Promotion_Product" value="' . $row->Name_Brand . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
+            $output .= '  <input type="text" class="form-control" name="Ip_Name_Promotion_Brand" id="Ip_Id_Promotion_Product" value="' . $row->Name_Brand . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
+            $output .= ' <input type="hidden" class="form-control text-center noHover Id_Brand_Promotion_1"  value="' . $row->Id_Brand . '" name="Id_Brand_Promotion_1[]">';
             $output .= '  </div>';
             $Payment_Amount = number_format($row->Payment_Amount, 2);
             $output .= ' <div class="input-group col-sm-6 ">';
             $output .= ' <div class="input-group-prepend"> ';
             $output .= '  <span class="input-group-text a1" id="inputGroup-sizing-default">ยอดชำระ :</span> </div>';
             $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Product" id="Ip_Id_Promotion_Product" value="' . $Payment_Amount . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
+            $output .= ' <input type="hidden" class="form-control text-center noHover Payment_Amount"  value="' . $row->Payment_Amount . '" name="Payment_Amount[]">';
             $output .= '  </div>';
             $output .= '  </div>';
             $output .= '  <br>';
@@ -493,7 +557,7 @@ class SellController extends Controller
             $output .= '  </td>';
             $output .= ' <td scope="row" width="5%" ><input type="number" class="form-control text-center noHover the_input_approve" name="Amount_Sell[]" value="1" min="1" max="' . ($row->Amount_Lot - $row->Amount_Preorder) . '" title= "กรุณาใส่ให้ตรง" required></td>';
             $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover total_cost_s"  value="' . $Price . '" " readonly>
-                            <input type="hidden" class="form-control text-center noHover  total_cost"  value="' . $row->Price . '" >         ';
+                            <input type="hidden" class="form-control text-center noHover  total_cost"  value="' . $row->Price . '" name="total_cost[]" >         ';
             $output .= ' </td> ';
             $output .= ' <td scope="row" width="5%" > <button type="button" class="btn btn-danger remove " id="" value="' . $row->Id_Product . '"  style="border-radius: 5px; width: 60px; "> <i class="fas fa-trash" style="margin-right: 5px;"></i>  </button></td>';
             // });

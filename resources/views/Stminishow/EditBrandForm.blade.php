@@ -25,7 +25,7 @@
                     </div>
                     <div class="card-body">
                         <form action="/Stminishow/updateBrand/{{$brands->Id_Brand}}" method="post">
-                        {{csrf_field()}}
+                            {{csrf_field()}}
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -34,9 +34,12 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <button type="submit" name="submit" id="submit" class="btn btn-success"> <i class="fas fa-pen" style="margin-right: 5px;"></i>แก้ไข</button>
+                            <a class="btn btn-danger my-2" href="/Stminishow/createBrand"> <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>กลับ</a>
                         </form>
-                        <button type="submit" name="submit" id="submit" class="btn btn-success"> <i class="fas fa-pen" style="margin-right: 5px;"></i>แก้ไข</button>
-                        <a class="btn btn-danger my-2" href="/Stminishow/createBrand"> <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>กลับ</a>
+
+
                     </div>
                 </div>
             </div>

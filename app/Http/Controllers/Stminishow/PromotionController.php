@@ -460,7 +460,7 @@ class PromotionController extends Controller
                 $promotionpay = promotionpays::find($Id_Promotion);
                 $promotion_payment = promotion_payments::all();
                 $brands = brand::all();
-                
+
 
                 $join1 = DB::table('promotion_payments')
                     ->join('premium_pros', 'premium_pros.Id_Premium_Pro', '=', 'promotion_payments.Id_Premium_Pro')
@@ -507,12 +507,19 @@ class PromotionController extends Controller
 
         $data1 = json_decode(json_encode($data), true);
         promotion_payments::destroy([$data1]);
-        $request2 = array(
-            'Id_Promotion' => $Id_Promotion,
-            'Payment_Amount' => $request->Payment_Amount,
-            'Id_Premium_Pro' => $request['Id_Premium_Pro']
-        );
-        promotion_payments::create($request2);
+
+        foreach ($request['Id_Premium_Pro'] as $item => $value) {
+            $request2 = array(
+                'Id_Promotion' => $Id_Promotion,
+                'Id_Premium_Pro' => $value,
+                'Amount_Premium_Pro' => $request['Amount_Premium_Pro'][$item]
+
+            );
+            // dd( $request2);
+
+            promotion_payments::create($request2);
+        }
+
 
         return redirect('/Stminishow/ShowPromotionPay');
     }

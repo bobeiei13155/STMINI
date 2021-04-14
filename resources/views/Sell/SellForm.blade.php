@@ -18,6 +18,9 @@
             <header>
                 <h1 class="h1 display">ขายสินค้า</h1>
             </header>
+            <textarea id="chk_Payment" name="chk_Payment" rows="10" hidden>
+
+            </textarea>
             <div class="row">
                 <div class="col">
                     <div class="card">
@@ -219,10 +222,13 @@
                                 @foreach($promotionpays as $promotionpay)
                                 <tr>
                                     <td>{{$promotionpay->Name_Promotion}}</td>
-                                    <td>{{$promotionpay->Name_Brand}}</td>
+                                    <td>{{$promotionpay->Name_Brand}}
+                                        <input type="hidden" class="form-control text-center noHover Id_Brand_Promotion_Get" value="{{$promotionpay->Id_Brand}} " name="Id_Brand_Promotion[]">
+                                        <input type="hidden" class="Payment_Amount" value="{{$promotionpay->Payment_Amount}} " name="Payment_Amount[]">
+                                    </td>
                                     <td>{{$promotionpay->Sdate_Promotion}}</td>
                                     <td>{{$promotionpay->Edate_Promotion}}</td>
-                                    <td> <button type="button" class="btn btn-warning ID_Promotion_Payment " id="{{$promotionpay->Id_Promotion}} " style="border-radius: 5px;  " data-toggle="modal" data-target="#myModal_Promotion_De_2"> <i class="fas fa-eye"></i></button></td>
+                                    <td> <button type="button" class="btn btn-warning ID_Promotion_Payment " id="{{$promotionpay->Id_Promotion}} " value="{{$promotionpay->Id_Promotion}} " style="border-radius: 5px;  " data-toggle="modal" data-target="#myModal_Promotion_De_2"> <i class="fas fa-eye"></i></button></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -325,6 +331,7 @@
                                         <th scope="col" width="6%">รูปภาพ</th>
                                         <th scope="col" width="9%">ชื่อของแถม</th>
                                         <th scope="col" width="5%">จำนวน</th>
+                                        <th scope="col" width="2%">#</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -459,6 +466,7 @@
                                         @foreach($brands as $brand)
                                         @if($product->Brand_Id == $brand->Id_Brand)
                                         {{$brand->Name_Brand}}
+                                        <input type="hidden" class="Id_Brand_Product " value=" {{$product->Brand_Id}}" name="Id_Brand_Product[]">
                                         @endif
                                         @endforeach
                                     </td>
@@ -690,8 +698,11 @@
 
     function sumPayment() {
         var payment_ = 0;
+        var band = [];
+        var price = [];
         $('.total_cost').each(function() {
             payment_ += parseFloat($(this).val());
+            price.push($(this).val());
         });
 
         discount_member = document.getElementById("discount_member").value;
@@ -703,13 +714,119 @@
 
         var payment_show = payment_ - ((payment_ * discount_member_) / 100);
         payment_show = Math.ceil(payment_show);
-
-
+        // var Id_Brand = test.find("input[name='Id_Brand[]']").val();
+        // alert(Id_Brand);
+        var Id_Brand_chk = "";
+        var total_chk = "";
 
         $('.Id_Brand').each(function() {
-            alert($(this).val());
-        });
+            band.push($(this).val());
 
+        });
+        // console.log(arr);
+        var bandAll = [];
+        var priceAll = [];
+        var testprice = 0;
+        for (let i = 0; i < band.length; i++) {
+            testprice = parseFloat(price[i]);
+            priceAll[i] = testprice;
+            bandAll[i] = band[i];
+            for (let j = 0; j < band.length; j++) {
+                // console.log(i);
+                if (i == j) {
+                    continue;
+                } else if (band[i] == band[j]) {
+                    priceAll[i] += parseFloat(price[j]);
+
+                }
+
+            }
+        }
+
+
+        // var Id_Brand_Promo = "";
+        $('.Id_Brand_Promotion_Get').each(function() {
+            // var chk_payment = false;
+            var tr_promotion = $(this).closest('tr');
+            var Payment_Amount = tr_promotion.find("input[name='Payment_Amount[]']").val();
+
+            var Payment_Amount_con = parseFloat(Payment_Amount);
+            // console.log(Id_Brand_Promo + ' ' + Payment_Amount_con);
+            var Id_Brand_Promo = $(this).val();
+            var sub_Id_Brand = Id_Brand_Promo.substring(0, 14);
+
+            for (var x in bandAll) {
+                var txt_air = document.getElementById('chk_Payment').value;
+                // console.log(txt_air);
+                if (bandAll[x] == sub_Id_Brand && Math.ceil(parseFloat(priceAll[x] - ((priceAll[x] * discount_member_) / 100))) >= Payment_Amount_con) {
+
+                    var add = Payment_Amount_con += bandAll[x];
+                    var chk_txt = txt_air.includes(add);
+
+
+                    if (document.getElementById("chk_Payment").innerHTML = chk_txt == true) {
+                        // swal('มีสินค้าของแถมแล้ว');
+
+                    } else {
+
+                        txt_air += add;
+
+                        $('#chk_Payment').val(txt_air);
+
+                        var _token = $('input[name="_token"]').val();
+
+
+                        $.ajax({
+                            url: "{{route('sell.select_promotion_payment')}}",
+                            method: "POST",
+                            data: {
+                                sub_Id_Brand: sub_Id_Brand,
+                                _token: _token
+                            },
+                            success: function(result) {
+                                $('.show_premium_product').append(result);
+                            }
+                        });
+
+                        break;
+                    }
+
+
+                }
+
+                // console.log(bandAll[x] + priceAll[x]);
+                // if (bandAll[x] == sub_Id_Brand && Math.ceil(parseFloat(priceAll[x] - ((priceAll[x] * discount_member_) / 100))) < Payment_Amount_con) {
+
+                //     var add = Payment_Amount_con += bandAll[x];
+                //     var chk_txt = txt_air.includes(add);
+                //     $('.Id_Brand').each(function() {
+                //         Id_Brand = $(this).val();
+                //         var sub_Id_Brand_Remove = Id_Brand.substring(0, 14);
+                //         console.log(sub_Id_Brand_Remove);
+                //     });
+
+                //     // alert(add);
+
+                //     // $('.Id_Brand_Pay_Remove').each(function() {
+
+                //     //     console.log(sub_Id_Brand_Remove);
+                //     //     if (document.getElementById("chk_Payment").innerHTML = chk_txt == true) {
+                //     //         console.log('ต่ำกว่ายอด' + add);
+                //     //         // alert(Id_Brand_Remove);
+                //     //         if (Id_Brand_Remove == bandAll[x]) {
+                //     //             $(this).parent().parent().remove();
+                //     //         }
+
+                //     //         // document.getElementById("chk_Payment").value = "";
+                //     //     }
+                //     // });
+
+
+
+                // }
+            }
+
+        });
 
         return payment_show;
     }
@@ -730,6 +847,21 @@
                 return false;
             };
         });
+
+
+        // var Id_Brand_chk = test.find("input[name='Id_Brand_Product[]']").val();
+        // alert('กดเลือก' + Id_Brand_chk);
+        // // var Id_Brand = "";
+        // $('.Id_Brand').each(function() {
+        //     var Id_Brand = $(this).val();
+        //     alert(Id_Brand);
+        //     if (Id_Brand_chk == Id_Brand) {
+        //         alert('เท่ากัน');
+        //     } else { 
+        //         alert('ไม่เท่ากัน');
+        //     };
+
+        // });
 
 
         var Amount_Sell = value.find("input[name='Amount_Sell[]']").val();
@@ -877,6 +1009,80 @@
 
 
 
+        var band = [];
+        var price = [];
+        $('.Id_Brand').each(function() {
+
+            band.push($(this).val());
+        });
+        $('.total_cost').each(function() {
+
+            price.push($(this).val());
+        });
+
+
+        var bandAll = [];
+        var priceAll = [];
+        var testprice = 0;
+        for (let i = 0; i < band.length; i++) {
+            testprice = parseFloat(price[i]);
+            priceAll[i] = testprice;
+            bandAll[i] = band[i];
+            for (let j = 0; j < band.length; j++) {
+                // console.log(i);
+                if (i == j) {
+                    continue;
+                } else if (band[i] == band[j]) {
+                    priceAll[i] += parseFloat(price[j]);
+
+                }
+
+            }
+        }
+        // console.log(bandAll);
+        // console.log(priceAll);
+        $('.Id_Brand_Promotion_Get').each(function() {
+            // var chk_payment = false;
+            var tr_promotion = $(this).closest('tr');
+            var Payment_Amount = tr_promotion.find("input[name='Payment_Amount[]']").val();
+
+            var Payment_Amount_con = parseFloat(Payment_Amount);
+            // console.log(Id_Brand_Promo + ' ' + Payment_Amount_con);
+            var Id_Brand_Promo = $(this).val();
+            var sub_Id_Brand = Id_Brand_Promo.substring(0, 14);
+
+            for (var x in bandAll) {
+                // console.log(txt_air);
+                if (bandAll[x] == sub_Id_Brand && Math.ceil(parseFloat(priceAll[x] - ((priceAll[x] * discount_member_) / 100))) < Payment_Amount_con) {
+
+                    $('.Id_Brand_Pay_Remove').each(function() {
+                        var Id_Brand_Pay_Remove = $(this).val();
+                        var sub_Id_Brand_Pay_Remove = Id_Brand_Pay_Remove.substring(0, 14);
+                        if (Id_Brand_Pay_Remove == bandAll[x]) {
+                            // console.log('ต่ำกว่ายอด' + bandAll[x]);
+                            $(this).parent().parent().remove();
+
+                            // var ret = "data-123".replace('data-','');
+
+                            var txtair_ = document.getElementById("chk_Payment").value;
+                            var delete_txt = Payment_Amount_con += bandAll[x];
+                            var ret = txtair_.replace(delete_txt, "");
+                            document.getElementById("chk_Payment").value = "";
+                            $('#chk_Payment').val(ret);
+
+
+                        }
+                    });
+
+
+                }
+
+
+            }
+
+        });
+
+
 
     });
 
@@ -956,6 +1162,38 @@
 
     $(document).on('click', '.remove', function() {
 
+
+        // if (bandAll[x] == sub_Id_Brand && Math.ceil(parseFloat(priceAll[x] - ((priceAll[x] * discount_member_) / 100))) < Payment_Amount_con) {
+
+        //     var add = Payment_Amount_con += bandAll[x];
+        //     var chk_txt = txt_air.includes(add);
+        //     $('.Id_Brand').each(function() {
+        //         Id_Brand = $(this).val();
+        //         var sub_Id_Brand_Remove = Id_Brand.substring(0, 14);
+        //         console.log(sub_Id_Brand_Remove);
+        //     });
+
+        //     // alert(add);
+
+        //     // $('.Id_Brand_Pay_Remove').each(function() {
+
+        //     //     console.log(sub_Id_Brand_Remove);
+        //     //     if (document.getElementById("chk_Payment").innerHTML = chk_txt == true) {
+        //     //         console.log('ต่ำกว่ายอด' + add);
+        //     //         // alert(Id_Brand_Remove);
+        //     //         if (Id_Brand_Remove == bandAll[x]) {
+        //     //             $(this).parent().parent().remove();
+        //     //         }
+
+        //     //         // document.getElementById("chk_Payment").value = "";
+        //     //     }
+        //     // });
+
+
+
+        // }
+
+
         Id_Product_Sells = $(this).val();
         // alert(Id_Product_Sells);
         $('.Id_Product_Remove').each(function() {
@@ -982,6 +1220,82 @@
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         }));
+
+
+        var band = [];
+        var price = [];
+        $('.Id_Brand').each(function() {
+
+            band.push($(this).val());
+        });
+        $('.total_cost').each(function() {
+
+            price.push($(this).val());
+        });
+
+
+        var bandAll = [];
+        var priceAll = [];
+        var testprice = 0;
+        for (let i = 0; i < band.length; i++) {
+            testprice = parseFloat(price[i]);
+            priceAll[i] = testprice;
+            bandAll[i] = band[i];
+            for (let j = 0; j < band.length; j++) {
+                // console.log(i);
+                if (i == j) {
+                    continue;
+                } else if (band[i] == band[j]) {
+                    priceAll[i] += parseFloat(price[j]);
+
+                }
+
+            }
+        }
+        // console.log(bandAll);
+        // console.log(priceAll);
+        $('.Id_Brand_Promotion_Get').each(function() {
+            // var chk_payment = false;
+            var tr_promotion = $(this).closest('tr');
+            var Payment_Amount = tr_promotion.find("input[name='Payment_Amount[]']").val();
+
+            var Payment_Amount_con = parseFloat(Payment_Amount);
+            // console.log(Id_Brand_Promo + ' ' + Payment_Amount_con);
+            var Id_Brand_Promo = $(this).val();
+            var sub_Id_Brand = Id_Brand_Promo.substring(0, 14);
+
+            for (var x in bandAll) {
+                // console.log(txt_air);
+                if (bandAll[x] == sub_Id_Brand && Math.ceil(parseFloat(priceAll[x] - ((priceAll[x] * discount_member_) / 100))) < Payment_Amount_con) {
+
+                    $('.Id_Brand_Pay_Remove').each(function() {
+                        var Id_Brand_Pay_Remove = $(this).val();
+                        var sub_Id_Brand_Pay_Remove = Id_Brand_Pay_Remove.substring(0, 14);
+                        if (Id_Brand_Pay_Remove == bandAll[x]) {
+                            // console.log('ต่ำกว่ายอด' + bandAll[x]);
+                            $(this).parent().parent().remove();
+
+                            // var ret = "data-123".replace('data-','');
+
+                            var txtair_ = document.getElementById("chk_Payment").value;
+                            var delete_txt = Payment_Amount_con += bandAll[x];
+                            var ret = txtair_.replace(delete_txt, "");
+                            document.getElementById("chk_Payment").value = "";
+                            $('#chk_Payment').val(ret);
+
+
+                        }
+                    });
+
+
+                }
+
+
+            }
+
+        });
+
+
 
     });
 </script>
