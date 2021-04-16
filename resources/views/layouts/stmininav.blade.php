@@ -89,6 +89,7 @@
             <ul id="memberDropdown" class="collapse list-unstyled ">
               <li> <a href="/Stminishow/showMember">ข้อมูลลูกค้า</a></li>
               <li> <a href="/Stminishow/createCategorymember">ข้อมูลประเภทลูกค้า</a></li>
+              <li> <a href="/Stminishow/createPayment">ข้อมูลประเภทการชำระ</a></li>
             </ul>
           </li>
         </ul>

@@ -38,6 +38,7 @@ class SellController extends Controller
         }
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -383,11 +384,12 @@ class SellController extends Controller
 
                 $telmems = Telmem::all();
 
-                $products = DB::table('products')->get();
-                $brands = DB::table('brands')->get();
+                $products = DB::table('products')->where('Status', '=', '0')->get();
+                $brands = DB::table('brands')->where('Status', '=', '0')->get();
                 $categories = DB::table('categories')->get();
-                $gens = DB::table('gens')->get();
-                // dd($products);
+                $gens = DB::table('gens')->where('Status', '=', '0')->get();
+                $payments = DB::table('payments')->where('Status', '=', '0')->get();
+                // dd($payments);
                 // ->whereBetween('',[,])
                 $lot_products = DB::table('lot_lists')->RightJoin('products', 'products.Id_Product', '=', 'lot_lists.Id_Product')
                     ->select('products.Name_Product', 'products.Id_Product', 'products.Amount_Preorder', DB::raw('sum(lot_lists.Amount_Lot) as Amount_Lot'))
@@ -459,6 +461,7 @@ class SellController extends Controller
                     ->with('products', $products)
                     ->with('brands', $brands)
                     ->with('gens', $gens)
+                    ->with('payments', $payments)
                     ->with('categories', $categories);
             } else {
                 Session()->flash("echo", "คุณไม่มีสิทธิ์");
@@ -521,8 +524,8 @@ class SellController extends Controller
             ->RightJoin('products', 'products.Id_Product', '=', 'lot_lists.Id_Product')
             ->join('categories', 'categories.Id_Category', '=', 'products.Category_Id')
             ->join('brands', 'brands.Id_Brand', '=', 'products.Brand_Id')
-            ->select('products.Id_Product', 'products.Amount_Preorder', 'products.Name_Product', 'categories.Name_Category', 'brands.Name_Brand', 'brands.Id_Brand', 'products.Price', 'products.Img_Product', DB::raw('sum(lot_lists.Amount_Lot) as Amount_Lot'))->where('products.Id_Product', '=',  $Id_Product)
-            ->groupBy('products.Id_Product', 'products.Amount_Preorder', 'products.Name_Product', 'categories.Name_Category', 'brands.Name_Brand', 'brands.Id_Brand', 'products.Price', 'products.Img_Product')->orderBy('Id_Product')
+            ->select('products.Id_Product', 'products.Amount_Preorder', 'products.Insurance', 'products.Name_Product', 'categories.Name_Category', 'brands.Name_Brand', 'brands.Id_Brand', 'products.Price', 'products.Img_Product', DB::raw('sum(lot_lists.Amount_Lot) as Amount_Lot'))->where('products.Id_Product', '=',  $Id_Product)
+            ->groupBy('products.Id_Product', 'products.Amount_Preorder', 'products.Insurance', 'products.Name_Product', 'categories.Name_Category', 'brands.Name_Brand', 'brands.Id_Brand', 'products.Price', 'products.Img_Product')->orderBy('Id_Product')
             ->get();
 
         // dd($q);
@@ -559,6 +562,26 @@ class SellController extends Controller
             $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover total_cost_s"  value="' . $Price . '" " readonly>
                             <input type="hidden" class="form-control text-center noHover  total_cost"  value="' . $row->Price . '" name="total_cost[]" >         ';
             $output .= ' </td> ';
+            $Insurance_data = 0;
+            $Insurance_data = $row->Insurance;
+            // dd($Insurance_data);
+            // var_dump(strtotime($Insurance));
+            $strStartDate = date('Y-m-d');
+            $datadate = date("Y-m-d", strtotime("+" . $Insurance_data . " day", strtotime($strStartDate)));
+            // dd($datadate);
+
+            if ($row->Insurance == "0") {
+                $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover Insurance_s"  value="ไม่มีประกัน" " readonly>
+            
+                  ';
+                $output .= ' </td> ';
+            } else {
+                $output .= ' <td scope="row" width="5%" ><input type="text" class="form-control text-center noHover Insurance_s"  value="' . $datadate . '" " readonly>
+            
+                <input type="hidden" class="form-control text-center noHover  Insurance"  value="' . $datadate . '" name="Insurance[]" >         ';
+                $output .= ' </td> ';
+            }
+
             $output .= ' <td scope="row" width="5%" > <button type="button" class="btn btn-danger remove " id="" value="' . $row->Id_Product . '"  style="border-radius: 5px; width: 60px; "> <i class="fas fa-trash" style="margin-right: 5px;"></i>  </button></td>';
             // });
 
@@ -573,10 +596,34 @@ class SellController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeSell(Request $request)
     {
-        //
+
+        $GenId = DB::table('sells')->max('Id_Sell');
+        $GenId_Sell = substr($GenId, 11, 14) + 1;
+        if (is_null($GenId)) {
+            $Id_Sell = "SEL" . "-" . date('Y') . date('m') . "-" . "000";
+        } else {
+
+            if ($GenId_Sell < 10) {
+                $Id_Sell = "SEL" . "-" . date('Y') . date('m') . "-" . "00" . $GenId_Sell;
+            } elseif ($GenId_Sell >= 10 && $GenId_Sell < 100) {
+                $Id_Sell = "SEL" . "-" . date('Y') . date('m') . "-" . "0" . $GenId_Sell;
+            } elseif ($GenId_Sell >= 100) {
+                $Id_Sell = "SEL" . "-" . date('Y') . date('m') . "-" . $GenId_Sell;
+            }
+        }
+
+
+
+        $sql_in_sells  = array(
+            'Id_Sells' => $Id_Sell,
+
+        );
+        print_r($sql_in_sells);
+        // DB::table('sells')->insert([$sql_in_sells]);
     }
+
 
     /**
      * Display the specified resource.

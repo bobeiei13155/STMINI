@@ -67,6 +67,20 @@ Route::post('/Stminishow/updateCategorymember/{Id_Cmember}', 'Stminishow\Categor
 Route::get('/Stminishow/deleteCategorymember/{Id_Cmember}', 'Stminishow\CategorymemberController@delete'); //ทำสิทธิ์แล้ว
 
 
+Route::get('/Stminishow/createPayment', 'Stminishow\PaymentController@ShowPayment'); //ทำสิทธิ์แล้ว
+Route::post('/Stminishow/createPayment', 'Stminishow\PaymentController@store');
+Route::get('/Stminishow/editPayment/{Id_Payment}', 'Stminishow\PaymentController@edit'); //ทำสิทธิ์แล้ว
+Route::post('/Stminishow/updatePayment/{Id_Payment}', 'Stminishow\PaymentController@update');
+Route::get('/Stminishow/deletePayment/{Id_Payment}', 'Stminishow\PaymentController@delete'); //ทำสิทธิ์แล้ว
+// Route::get('/Stminishow/createCategorymember', 'Stminishow\CategorymemberController@index'); //ทำสิทธิ์แล้ว
+// Route::post('/Stminishow/createCategorymember', 'Stminishow\CategorymemberController@store');
+// Route::get('/Stminishow/editCategorymember/{Id_Cmember}', 'Stminishow\CategorymemberController@edit'); //ทำสิทธิ์แล้ว
+// Route::post('/Stminishow/updateCategorymember/{Id_Cmember}', 'Stminishow\CategorymemberController@update');
+// Route::get('/Stminishow/deleteCategorymember/{Id_Cmember}', 'Stminishow\CategorymemberController@delete'); //ทำสิทธิ์แล้ว
+
+
+
+
 //ลูกค้า
 Route::get('/Stminishow/SearchMember', 'Stminishow\MemberController@searchMEM'); //ทำสิทธิ์แล้ว
 Route::get('/Stminishow/showMember', 'Stminishow\MemberController@ShowMem'); //ทำสิทธิ์แล้ว
@@ -222,3 +236,4 @@ Route::post('/Sell/createSell/select_Promotion_Product', 'Sell\SellController@se
 Route::post('/Sell/createSell/Detail_Promotion_Payments', 'Sell\SellController@Detail_Promotion_Payments')->name('sell.Detail_Promotion_Payments');
 Route::post('/Sell/createSell/Select_Discount', 'Sell\SellController@Select_Discount')->name('sell.Select_Discount');
 Route::post('/Sell/createSell/select_promotion_payment', 'Sell\SellController@select_promotion_payment')->name('sell.select_promotion_payment');
+Route::post('/Sell/storeSell', 'Sell\SellController@storeSell');

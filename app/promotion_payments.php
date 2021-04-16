@@ -8,5 +8,5 @@ class promotion_payments extends Model
 {
     public $incrementing = false;
     protected $primaryKey = 'Id_Promotion';
-    protected $fillable = ['Id_Promotion','Id_Premium_Pro','Amount_Premium_Pro'];
+    protected $fillable = ['Id_Promotion','Id_Premium_Pro','Amount_Premium_Pro','No_Promotion'];
 }

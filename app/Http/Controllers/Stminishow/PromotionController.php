@@ -149,6 +149,7 @@ class PromotionController extends Controller
 
     public function createPromotionPro(Request $request)
     {
+        $No_Promotion = 0;
         //dd($request);
         $GenId = DB::table('promotions')->max('Id_Promotion');
 
@@ -185,16 +186,19 @@ class PromotionController extends Controller
         $promotions->save();
 
 
-
+        // $i = 0;
         foreach ($request['Id_Premium_Pro'] as $item => $value) {
+            $No_Promotion++;
             $request2 = array(
                 'Id_Promotion' => $Id_Promotion,
                 'Id_Product' => $request->Id_Product,
+                'No_Promotion' =>    $No_Promotion,
                 'Id_Premium_Pro' => $request['Id_Premium_Pro'][$item],
                 'Amount_Premium_Pro' => $request['Amount_Premium_Pro'][$item]
 
             );
-
+            // $i++;
+            // print_r($request2);
 
             promotion_prod::create($request2);
         }
@@ -390,6 +394,7 @@ class PromotionController extends Controller
     public function createPromotionPay(Request $request)
     {
         // dd($request);
+        $No_Promotion = 0;
         $GenId = DB::table('promotionpays')->max('Id_Promotion');
 
         if (is_null($GenId)) {
@@ -427,8 +432,10 @@ class PromotionController extends Controller
         $promotionpays->save();
 
         foreach ($request['Id_Premium_Pro'] as $item => $value) {
+            $No_Promotion++;
             $request2 = array(
                 'Id_Promotion' => $Id_Promotion,
+                'No_Promotion' =>    $No_Promotion,
                 'Id_Premium_Pro' => $request['Id_Premium_Pro'][$item],
                 'Amount_Premium_Pro' => $request['Amount_Premium_Pro'][$item]
 

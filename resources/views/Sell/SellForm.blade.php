@@ -12,7 +12,7 @@
     @endif
 </div>
 <section class="forms">
-    <form action="# " method="post" enctype="multipart/form-data">
+    <form action="/Sell/storeSell" method="post" enctype="multipart/form-data">
         <div class="container-fluid">
             <!-- Page Header-->
             <header>
@@ -272,7 +272,7 @@
                                     <div class="input-group-prepend">
                                         <button type="button" data-toggle="modal" data-target="#myModal_Product" class="input-group-text " id="s_member" id="inputGroup-sizing-default" style="background-color: #42A667;color:#FFF; border-radius: 10px 0px 0px 10px; height:40px;"><i class="fas fa-search"></i></button>
                                     </div>
-                                    <input type="text" class="form-control" id="tags" value="" style="background-color: #FFF; border-radius: 0px 10px 10px 0px;">
+                                    <input type="text" class="form-control" id="tags" value="" style="background-color: #FFF; border-radius: 0px 10px 10px 0px;" readonly>
                                 </div>
                                 <div class=" col">
                                 </div>
@@ -305,6 +305,7 @@
                                         <th scope="col" width="5%">ราคา</th>
                                         <th scope="col" width="5%">จำนวน</th>
                                         <th scope="col" width="5%">ราคารวม</th>
+                                        <th scope="col" width="5%">วันที่หมดประกัน</th>
                                         <th scope="col" width="5%">ลบ</th>
                                     </tr>
 
@@ -351,22 +352,26 @@
                             <div class="form-group row">
                                 <div class="input-group col-sm-5 ">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text a1" id="inputGroup-sizing-default">การชำระเงิน</span>
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">การชำระเงิน</span>
                                     </div>
-                                    <select class="form-control " name="Payment" style="border-radius: 0px 10px 10px 0px;">
-                                        <option value="">--> เลือกการชำระ <-- </option>
-                                        <option value="เงินสด">เงินสด</option>
-                                        <option value="โอนเงิน">โอนเงิน</option>
-                                    </select>
+    
+                                        <select class="form-control" name="Payment_Sell" style="border-radius: 0px 10px 10px 0px;">
+                                            <option value="">เลือกประเภทการชำระ </option>
+                                            @foreach($payments as $payment)
+                                            <option value="{{$payment->Id_Payment}}">{{$payment->Name_Payment}}</option>
+                                            @endforeach
+                                        </select>
+                               
                                 </div>
-                                <div class="col-sm-3 ">
+                                <div class="input-group col-sm-3 ">
+
 
                                 </div>
                                 <div class="input-group col-sm-4 ">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">รับเงิน :</span>
                                     </div>
-                                    <input type="text" class="form-control text-center" name="Receipt_date" id="Receipt_date" value="">
+                                    <input type="number" class="form-control text-center Member_Pay" name="Member_Pay" id="Member_Pay" min="0" value="0">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
                                     </div>
@@ -383,7 +388,18 @@
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
                                     </div>
                                 </div>
+                                <div class="col-sm-3 ">
 
+                                </div>
+                                <div class="input-group col-sm-4 ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">เงินทอน :</span>
+                                    </div>
+                                    <input type="text" class="form-control text-center Member_Pay" name="coin" id="coin" value="" readonly>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
+                                    </div>
+                                </div>
 
 
                             </div>
@@ -414,7 +430,7 @@
                                 </div>
                                 <div class="col-sm-4">
 
-                                    <button type="submit" name="submit" class="btn btn-primary " style="width:100%; height:40px; background-color: #42A667; border-color: #42A667; border-radius: 10px;"><i class="fas fa-cash-register fa-2x"></i> </button>
+                                    <button type="submit" name="Enter_Sell" id="Enter_Sell" class="btn btn-primary " style="width:100%; height:40px; background-color: #42A667; border-color: #42A667; border-radius: 10px;" disabled><i class="fas fa-cash-register fa-2x"></i> </button>
 
                                 </div>
                             </div>
@@ -576,6 +592,34 @@
         });
     });
 
+
+
+    $("#Member_Pay").on("change", function() {
+        var payment = $(".payment").val();
+        // var ret = "data-123".replace('data-','');
+        var payment_re = payment.replace(',', '');
+        var Member_Pay = $(this).val();
+        var payment_con = parseFloat(payment_re);
+        var Member_Pay_con = parseFloat(Member_Pay);
+
+        // console.log(payment_con);
+        // console.log(Member_Pay_con);
+
+        if (payment_con <= Member_Pay_con) {
+            // document.getElementById('Enter_Sell').disabled = true;
+            var coin = Member_Pay_con - payment_con;
+
+            $(':input[type="submit"]').prop('disabled', false);
+            // console.log(coin + 'เงินทอน');
+            $('#coin').val(coin);
+        } else {
+            $(':input[type="submit"]').prop('disabled', true);
+            // console.log(Member_Pay_con + 'ยังไม่ครบ');
+
+        }
+
+        // alert(payment);
+    });
 
 
 
@@ -794,36 +838,7 @@
 
                 }
 
-                // console.log(bandAll[x] + priceAll[x]);
-                // if (bandAll[x] == sub_Id_Brand && Math.ceil(parseFloat(priceAll[x] - ((priceAll[x] * discount_member_) / 100))) < Payment_Amount_con) {
 
-                //     var add = Payment_Amount_con += bandAll[x];
-                //     var chk_txt = txt_air.includes(add);
-                //     $('.Id_Brand').each(function() {
-                //         Id_Brand = $(this).val();
-                //         var sub_Id_Brand_Remove = Id_Brand.substring(0, 14);
-                //         console.log(sub_Id_Brand_Remove);
-                //     });
-
-                //     // alert(add);
-
-                //     // $('.Id_Brand_Pay_Remove').each(function() {
-
-                //     //     console.log(sub_Id_Brand_Remove);
-                //     //     if (document.getElementById("chk_Payment").innerHTML = chk_txt == true) {
-                //     //         console.log('ต่ำกว่ายอด' + add);
-                //     //         // alert(Id_Brand_Remove);
-                //     //         if (Id_Brand_Remove == bandAll[x]) {
-                //     //             $(this).parent().parent().remove();
-                //     //         }
-
-                //     //         // document.getElementById("chk_Payment").value = "";
-                //     //     }
-                //     // });
-
-
-
-                // }
             }
 
         });

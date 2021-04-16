@@ -333,7 +333,7 @@ class ReceiptController extends Controller
 
         $chk = 0;
 
-        $No_Receipt = 0;
+        $No_Receipt = 0; 
         $Id = session()->get('fname');
         $id_Emp = DB::table('employees')->select('Id_Emp')->where('FName_Emp', "=", "{$Id}")->get();
         $Id_Emp = $id_Emp[0]->Id_Emp;
