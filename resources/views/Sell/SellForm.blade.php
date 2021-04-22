@@ -355,7 +355,7 @@
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">การชำระเงิน</span>
                                     </div>
 
-                                    <select class="form-control" name="Payment_Sell" style="border-radius: 0px 10px 10px 0px;" required>
+                                    <select class="form-control" name="Payment_Sell" id="Payment_Sell" style="border-radius: 0px 10px 10px 0px;" required>
                                         <option value="">เลือกประเภทการชำระ </option>
                                         @foreach($payments as $payment)
                                         <option value="{{$payment->Id_Payment}}">{{$payment->Name_Payment}}</option>
@@ -430,7 +430,7 @@
                                 </div>
                                 <div class="col-sm-4">
 
-                                    <button type="submit" name="Enter_Sell" id="Enter_Sell" class="btn btn-primary " style="width:100%; height:40px; background-color: #42A667; border-color: #42A667; border-radius: 10px;" disabled><i class="fas fa-cash-register fa-2x"></i> </button>
+                                    <button type="submit" name="Enter_Sell" id="Enter_Sell" class="btn btn-primary Enter_Sell" onclick="confirmalert( event );" style="width:100%; height:40px; background-color: #42A667; border-color: #42A667; border-radius: 10px;" disabled><i class="fas fa-cash-register fa-2x"></i> </button>
 
                                 </div>
                             </div>
@@ -533,6 +533,7 @@
         </div>
 
 
+
         <div id="myModal_Promotion_De_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
             <div role="document" class="modal-dialog modal-lg">
                 <div class="modal-content" style="width: auto;">
@@ -584,6 +585,50 @@
             ]
         });
     });
+
+
+
+    function confirmalert(e) {
+        e.preventDefault();
+        var frm = e.target.form;
+
+        var Payment = $('#Payment_Sell').val();
+
+        if (Payment == "PYM-202104-001") {
+            swal({
+                title: "",
+                text: "ตรวจสอบสลิปการโอนจากลูกค้า ?",
+                icon: "success",
+                buttons: ['ยังไม่พร้อมโอน', 'โอนเงินแล้ว'],
+                dangerMode: true,
+
+            }).then(function(isConfirm) {
+                if (isConfirm) {
+                    swal("ชำระเงินสำเร็จ!", {
+                        icon: "success",
+                    });
+                    frm.submit(); // <--- submit form programmatically
+                } else {
+                    swal("ลูกค้ายังไม่พร้อมโอน !", "กรุณารอสลิปการโอนจากลูกค้า", "error");
+                }
+            })
+        } else {
+            swal("ชำระเงินสำเร็จ!", {
+                icon: "success",
+            });
+            frm.submit();
+        }
+
+
+    }
+
+    $(document).on('submit', '.Enter_Sell', function() {
+
+
+        alert('wwwww')
+    })
+
+
 
 
     $(document).on('click', '#tags', function() {
@@ -1043,9 +1088,9 @@
             $('.rows' + rowid).each(function() {
                 console.log(rowid);
                 No++;
-                var varcount = $('.' + rowid +'.Premium_Pro' + No).val();
-                
-                $('.' + rowid +'.No' + No).val(input_approve * varcount);
+                var varcount = $('.' + rowid + '.Premium_Pro' + No).val();
+
+                $('.' + rowid + '.No' + No).val(input_approve * varcount);
 
 
             });

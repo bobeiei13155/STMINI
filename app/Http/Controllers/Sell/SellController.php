@@ -1043,7 +1043,7 @@ where sell_lists.Id_Sell ='" . $Id_Sell . "'
      */
     public function storeSell(Request $request)
     {
-
+        // dd($request);
         $GenId = DB::table('sells')->max('Id_Sell');
         $GenId_Sell = substr($GenId, 11, 14) + 1;
         if (is_null($GenId)) {

@@ -259,9 +259,13 @@ Route::get('/Preorder/PreorderController/{Id_Preorder}', 'Preorder\PreorderContr
 
 
 
+Route::get('/Claim/ShowClaim', 'Claim\ClaimController@ShowClaim'); //ทำสิทธิ์แล้ว
+Route::get('/Claim/createClaim', 'Claim\ClaimController@createClaim'); //ทำสิทธิ์แล้ว
+Route::post('/Claim/createClaim/select_Id_Sell', 'Claim\ClaimController@select_Id_Sell')->name('Claim.select_Id_Sell');
+
+
 Route::get('/Report/ShowCosttap', 'Report\ReportController@ShowCosttap'); //ทำสิทธิ์แล้ว
 Route::post('/Report/ShowCosttap/select_corttap', 'Report\ReportController@select_corttap')->name('report.select_corttap');
-
 
 
 Route::get('/Report/ShowReportSell', 'Report\ReportController@ShowReportSell'); //ทำสิทธิ์แล้ว

@@ -122,7 +122,7 @@
           <li><a href="#PreOrderDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-store"></i>สั่งจองสินค้า</a>
             <ul id="PreOrderDropdown" class="collapse list-unstyled ">
               <li> <a href="/Preorder/ShowPreOrder">สั่งจองสินค้า</a></li>
-              <li> <a href="#">รับสินค้าสั่งจอง</a></li>
+              <!-- <li> <a href="#">รับสินค้าสั่งจอง</a></li> -->
             </ul>
           </li>
         </ul>
@@ -147,7 +147,7 @@
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#ClaimDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-tools"></i>เคลมสินค้า</a>
             <ul id="ClaimDropdown" class="collapse list-unstyled ">
-              <li> <a href="#">เคลมสินค้า</a></li>
+              <li> <a href="/Claim/ShowClaim">เคลมสินค้า</a></li>
             </ul>
           </li>
         </ul>

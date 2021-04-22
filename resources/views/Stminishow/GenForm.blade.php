@@ -31,7 +31,7 @@
             <div class="card-header">
                 <div class="row">
                     <!-- <label for="Name_Category" >ชื่อประเภทสินค้า</label> -->
-                    <form action="/Stminishow/createPattern" method="GET" enctype="multipart/form-data">
+                    <form action="/Stminishow/createGen" method="POST" enctype="multipart/form-data">
                         {{csrf_field()}}
                         <div class="col">
                             <div class="input-group">

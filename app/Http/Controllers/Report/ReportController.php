@@ -17,7 +17,7 @@ class ReportController extends Controller
     {
         Session()->forget("echo", "คุณไม่มีสิทธิ์");
         if (session()->has('login')) {
-            if (session()->has('loginpermission13')) {
+            if (session()->has('loginpermission16')) {
 
                 $costtap = DB::select(DB::raw("SELECT y1.Id_Product , y1.Name_Product  ,
                 IFNULL(SUM(y2.Total_Price * (y2.yymm='2021-01')) ,0.00) as Jan,
@@ -131,7 +131,7 @@ class ReportController extends Controller
 
         Session()->forget("echo", "คุณไม่มีสิทธิ์");
         if (session()->has('login')) {
-            if (session()->has('loginpermission13')) {
+            if (session()->has('loginpermission16')) {
 
 
                 $reportsells = DB::select(DB::raw("SELECT  products.Id_Product ,products.Name_Product,sum(sell_lists.Amount_Sell) as Amount_Sell 
@@ -146,7 +146,7 @@ class ReportController extends Controller
 
 
 
-            
+
 
                 return view("report.ReportSellForm")->with('reportsells', $reportsells);
             } else {
@@ -185,7 +185,7 @@ class ReportController extends Controller
             "));
 
 
-
+    
 
         return view("report.ReportSellForm")->with('reportsells', $reportsells);
     }

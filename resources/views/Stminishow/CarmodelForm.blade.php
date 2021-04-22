@@ -32,7 +32,8 @@
             <div class="card-header">
                 <div class="row">
                     <!-- <label for="Name_Category" >ชื่อประเภทสินค้า</label> -->
-                    <form action="/Stminishow/createCarmodel" method="GET" enctype="multipart/form-data">
+                    <form action="/Stminishow/createCarmodel" method="post" enctype="multipart/form-data">
+                    {{csrf_field()}}
                         <div class="col">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="Name_Carmodel" id="Name_Carmodel" placeholder="ชื่อรุ่นรถ" style="width: 300px;" required>

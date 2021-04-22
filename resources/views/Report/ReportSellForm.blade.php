@@ -121,11 +121,16 @@
     data.addColumn('string', 'Element');
     data.addColumn('number', 'Percentage');
     data.addRows([
-      @foreach($reportsells as $row)
-      ['{{ $row->Name_Product }}', {{$row->Amount_Sell}}]
+      @foreach($reportsells as $row)[
+        '{{ $row->Name_Product }}', {{$row->Amount_Sell}}
+      ],
       @endforeach
     ]);
-   
+    // data.addRows([
+    //     ['Nitrogen', 0.10],
+    //     ['Oxygen', 0.10],
+    //     ['Other', 0.10]
+    // ]);
 
     var option = {
       title: 'จำนวนสินค้าที่ขายได้',

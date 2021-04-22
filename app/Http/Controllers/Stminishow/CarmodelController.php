@@ -39,11 +39,11 @@ class CarmodelController extends Controller
                 $searchCMP = $request->searchCMD;
                 $carmodels = DB::table('carmodels')
                     ->join('gens', 'carmodels.Gen_Id', "LIKE", 'gens.Id_Gen')
-                    ->select('carmodels.Id_Carmodel', 'carmodels.Gen_Id','carmodels.Name_Carmodel','gens.Name_Gen', 'gens.Id_Gen','carmodels.Status')
+                    ->select('carmodels.Id_Carmodel', 'carmodels.Gen_Id', 'carmodels.Name_Carmodel', 'gens.Name_Gen', 'gens.Id_Gen', 'carmodels.Status')
                     ->where('Id_Carmodel', "LIKE", "%{$searchCMP}%")
                     ->orwhere('Name_Carmodel', "LIKE", "%{$searchCMP}%")
                     ->orwhere('Name_Gen', "LIKE", "%{$searchCMP}%")->paginate(5);
-                    $count = Carmodel::where('Status', '=', 0)->count();
+                $count = Carmodel::where('Status', '=', 0)->count();
                 return view("Stminishow.SearchCarmodelForm")->with("carmodels", $carmodels)->with('gens', gen::all())->with('count', $count);
             } else {
                 Session()->flash("echo", "คุณไม่มีสิทธิ์");
@@ -73,6 +73,7 @@ class CarmodelController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $request->validate([
             'Name_Carmodel' => 'required|unique:Carmodels',
             'Gen_Id' => 'required'
