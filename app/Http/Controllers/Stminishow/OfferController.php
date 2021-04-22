@@ -781,7 +781,7 @@ class OfferController extends Controller
         }
         // echo ('yes');
 
-        return redirect('/Stminishow/ShowOffer');
+        return redirect('/Stminishow/ShowApprove');
     }
     /**
      * Show the form for editing the specified resource.

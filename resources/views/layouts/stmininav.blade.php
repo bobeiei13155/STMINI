@@ -38,6 +38,7 @@
   <script src="https://kit.fontawesome.com/5c27faf919.js" crossorigin="anonymous"></script>
 
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> -->
 </head>
 
 <body>
@@ -120,7 +121,7 @@
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#PreOrderDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-store"></i>สั่งจองสินค้า</a>
             <ul id="PreOrderDropdown" class="collapse list-unstyled ">
-              <li> <a href="/Preorder/Showpreorder">สั่งจองสินค้า</a></li>
+              <li> <a href="/Preorder/ShowPreOrder">สั่งจองสินค้า</a></li>
               <li> <a href="#">รับสินค้าสั่งจอง</a></li>
             </ul>
           </li>
@@ -153,9 +154,9 @@
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#ReportDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-chart-bar"></i>ออกรายงาน</a>
             <ul id="ReportDropdown" class="collapse list-unstyled ">
-              <li><a href="#">ปริมาณยอดขายประจำปี</a></li>
+              <li><a href="/Report/ShowCosttap">ปริมาณยอดขายประจำปี</a></li>
               <li><a href="#">รายได้และกำไรตามช่วง</a></li>
-              <li><a href="#">จำนวนสินค้าที่ขายได้</a></li>
+              <li><a href="/Report/ShowReportSell">จำนวนสินค้าที่ขายได้</a></li>
               <li><a href="#">ยอดการใช้โปรโมชั่น</a></li>
               <li><a href="#">การเคลมสินค้าแต่ละประเภท</a></li>
 
@@ -217,7 +218,7 @@
 <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{asset('js/grasp_mobile_progress_circle-1.0.0.min.js')}}"></script>
 <script src="{{asset('vendor/jquery.cookie/jquery.cookie.js')}}"> </script>
-<script src="{{asset('vendor/chart.js/Chart.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <script src="{{asset('vendor/jquery-validation/jquery.validate.min.js')}}"></script>
 <script src="{{asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js')}}"></script>
 <script src="{{asset('js/charts-home.js')}}"></script>

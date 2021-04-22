@@ -12,11 +12,11 @@
     @endif
 </div>
 <section class="forms">
-    <form action="/Sell/storeSell" method="post" enctype="multipart/form-data">
+    <form action="/Preorder/storePreorder" method="post" enctype="multipart/form-data">
         <div class="container-fluid">
             <!-- Page Header-->
             <header>
-                <h1 class="h1 display">ขายสินค้า</h1>
+                <h1 class="h1 display">สั่งจองสินค้า</h1>
             </header>
             <textarea id="chk_Payment" name="chk_Payment" rows="10" hidden>
 
@@ -45,15 +45,15 @@
                                 </div>
                                 <div class="input-group col-sm-3 ">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text a1" id="inputGroup-sizing-default">เวลา :</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="Time" id="Time" value="<?php echo date(' H:i:s'); ?>" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px;" readonly>
-                                </div>
-                                <div class="input-group col-sm-3 ">
-                                    <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default">วันที่ :</span>
                                     </div>
                                     <input type="text" class="form-control" name="date_sell" id="date_sell" value="<?php echo date('Y-m-d'); ?>" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px;" readonly>
+                                </div>
+                                <div class="input-group col-sm-3 ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default">เวลา :</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="Time" id="Time" value="<?php echo date(' H:i:s'); ?>" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px;" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -71,7 +71,22 @@
                                         <button type="button" data-toggle="modal" data-target="#myModal" class="input-group-text " id="s_member" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;" disabled><i class="fas fa-search"></i></button>
                                     </div>
                                 </div>
-                                <div class="input-group col-sm-4">
+                                <div class="input-group col-sm-1 ">
+                                    
+                                </div>
+                                <div class="input-group col-sm-3">
+
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default">วันที่นัดรับ :</span>
+                                    </div>
+                                    <?php $today = date_create(date('Y-m-d')) ;
+
+                                        $today =  date_add($today,date_interval_create_from_date_string("15 days"));
+
+                                        $today = date_format($today,'Y-m-d');
+
+                                    ?>
+                                    <input type="date" class="form-control" name="date_receipt" id="date_receipt" value="" min="<?php echo $today ?>"  style=" border-radius: 0px 10px 10px 0px;" required>
 
                                 </div>
 
@@ -305,7 +320,6 @@
                                         <th scope="col" width="5%">ราคา</th>
                                         <th scope="col" width="5%">จำนวน</th>
                                         <th scope="col" width="5%">ราคารวม</th>
-                                        <th scope="col" width="5%">วันที่หมดประกัน</th>
                                         <th scope="col" width="5%">ลบ</th>
                                     </tr>
 
@@ -365,13 +379,21 @@
                                 </div>
                                 <div class="input-group col-sm-3 ">
 
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:80px">มัดจำ :</span>
+                                    </div>
+                                    <input type="number" class="form-control text-center Deposit" name="Deposit" id="Deposit" min="5" max="100" value="0">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> %</span>
+                                    </div>
+
 
                                 </div>
                                 <div class="input-group col-sm-4 ">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">รับเงิน :</span>
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">เงินมัดจำ :</span>
                                     </div>
-                                    <input type="number" class="form-control text-center Member_Pay" name="Member_Pay" id="Member_Pay" min="0" value="0">
+                                    <input type="text" class="form-control text-center Deposit_Show" name="Deposit_Show" id="Deposit_Show" readonly>
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
                                     </div>
@@ -393,9 +415,9 @@
                                 </div>
                                 <div class="input-group col-sm-4 ">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">เงินทอน :</span>
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">รับเงินมัดจำ :</span>
                                     </div>
-                                    <input type="text" class="form-control text-center Member_Pay" name="coin" id="coin" value="" readonly>
+                                    <input type="number" class="form-control text-center Member_Pay" name="Member_Pay" id="Member_Pay" min="0" value="0">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
                                     </div>
@@ -413,7 +435,18 @@
                                         <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px; width:55px;"> %</span>
                                     </div>
                                 </div>
+                                <div class="col-sm-3 ">
 
+                                </div>
+                                <div class="input-group col-sm-4 ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">เงินทอน :</span>
+                                    </div>
+                                    <input type="text" class="form-control text-center Member_Pay" name="coin" id="coin" value="" readonly>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <div class="input-group col-sm-5 ">
@@ -461,97 +494,78 @@
                                     <th>ยี่ห้อสินค้า</th>
                                     <th>GEN</th>
                                     <th>ราคา</th>
-                                    <th>จำนวนสินค้าที่ขายได้</th>
                                     <th>โปรโมชั่นของแถม</th>
                                     <th>เลือก</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($products as $product)
+                                @foreach($product_preorders as $product_preorder)
                                 <tr>
-                                    <td> {{$product->Id_Product}}
-                                        <input type="hidden" class="Id_Lot" value="{{$product->Id_Lot}}" name="Id_Lot[]">
+                                    <td> {{$product_preorder->Id_Product}}
                                     </td>
-                                    <td> {{$product->Name_Product}}</td>
+                                    <td> {{$product_preorder->Name_Product}}</td>
                                     <td>
-                                        @foreach($categories as $category)
-                                        @if($product->Category_Id == $category->Id_Category)
-                                        {{$category->Name_Category}}
+
+                                        {{$product_preorder->Name_Category}}
+
+                                    </td>
+                                    <td>
+
+                                        {{$product_preorder->Name_Brand}}
+                                        <input type="hidden" class="Id_Brand_Product " value="{{$product_preorder->Brand_Id}}" name="Id_Brand_Product[]">
+
+                                    </td>
+                                    <td>
+
+                                        {{$product_preorder->Name_Gen}}
+
+                                    </td>
+                                    <td>
+                                        {{number_format($product_preorder->Price,2)}}
+                                    </td>
+
+                                    <td>
+                                        @foreach($promotions as $promotion)
+                                        @if($product_preorder->Id_Product == $promotion->Id_Product)
+                                        <button type="button" class="btn btn-warning ID_Promotion_Product " id="{{$promotion->Id_Promotion}} " style="border-radius: 5px;  " data-toggle="modal" data-target="#myModal_Promotion_De_1"> <i class="fas fa-eye"></i></button>
+                                        <input type="hidden" value="{{$promotion->Id_Promotion}} " name="Id_Promotion_Product_inp[]">
+                                        <input type="hidden" value="{{$product_preorder->Price}} " name="Price_Product[]">
                                         @endif
                                         @endforeach
                                     </td>
-                                    <td>
-                                        @foreach($brands as $brand)
-                                        @if($product->Brand_Id == $brand->Id_Brand)
-                                        {{$brand->Name_Brand}}
-                                        <input type="hidden" class="Id_Brand_Product " value="{{$product->Brand_Id}}" name="Id_Brand_Product[]">
-                                        @endif
-                                        @endforeach
-                                    </td>
-                                    <td>
-                                        @foreach($gens as $gen)
-                                        @if($product->Gen_Id == $gen->Id_Gen)
-                                        {{$gen->Name_Gen}}
-                                        @endif
-                                        @endforeach
-                                    </td>
-                                    <td>
-                                        {{number_format($product->Price,2)}}
-                                    </td>
-                                    <td>
-                                        @if(($product->Amount_Lot - $product->Amount_Preorder) <= 0) <div style="color:red"> 0<input type="hidden" class="form-control text-center noHover" value=" 0" name="Amount_Sell[]">
+
+
+
+                                    <td> <button type="button" class="btn btn-primary buttonID_Product" id="{{$product_preorder->Id_Product}}" style="border-radius: 5px; width: 120px; " data-toggle="modal" data-target="#myModalOffer"> <i class="fas fa-cart-arrow-down" style="margin-right: 5px;"></i> เลือกสินค้า</button></td>
+                                    <input type="hidden" value="{{$product_preorder->Price}} " name="Price_Product[]">
+                                </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+
                     </div>
-                    @else
-                    {{$product->Amount_Lot - $product->Amount_Preorder}}
-                    <input type="hidden" class="form-control text-center noHover" value="{{$product->Amount_Lot - $product->Amount_Preorder}}" name="Amount_Sell[]">
-                    @endif
-
-
-                    </td>
-                    <td>
-                        @foreach($promotions as $promotion)
-                        @if($product->Id_Product == $promotion->Id_Product)
-                        <button type="button" class="btn btn-warning ID_Promotion_Product " id="{{$promotion->Id_Promotion}} " style="border-radius: 5px;  " data-toggle="modal" data-target="#myModal_Promotion_De_1"> <i class="fas fa-eye"></i></button>
-                        <input type="hidden" value="{{$promotion->Id_Promotion}} " name="Id_Promotion_Product_inp[]">
-                        <input type="hidden" value="{{$product->Price}} " name="Price_Product[]">
-                        @endif
-                        @endforeach
-                    </td>
-
-
-
-                    <td> <button type="button" class="btn btn-primary buttonID_Product" id="{{$product->Id_Product}}" style="border-radius: 5px; width: 120px; " data-toggle="modal" data-target="#myModalOffer"> <i class="fas fa-cart-arrow-down" style="margin-right: 5px;"></i> เลือกสินค้า</button></td>
-                    <input type="hidden" value="{{$product->Price}} " name="Price_Product[]">
-                    </tr>
-                    @endforeach
-
-                    </tbody>
-                    </table>
-
                 </div>
             </div>
-        </div>
 
 
-        <div id="myModal_Promotion_De_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-            <div role="document" class="modal-dialog modal-lg">
-                <div class="modal-content" style="width: auto;">
-                    <div class="modal-header">
-                        <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#F0B71A; padding-right: 8px; "></i>รายละเอียดโปรโมชั่นยอดชำระ</h5>
-                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-                    </div>
-                    <div class="modal-body">
+            <div id="myModal_Promotion_De_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog modal-lg">
+                    <div class="modal-content" style="width: auto;">
+                        <div class="modal-header">
+                            <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#F0B71A; padding-right: 8px; "></i>รายละเอียดโปรโมชั่นยอดชำระ</h5>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
 
-                        <div class="show_product_promotion">
+                            <div class="show_product_promotion">
+
+                            </div>
 
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div>
-
-
 
     </form>
 </section>
@@ -585,24 +599,46 @@
         });
     });
 
+    $(document).on('change', '#Deposit', function() {
+        if (Deposit == '') {
+            $(this).val(0);
+        }
+        var Deposit = parseFloat($(this).val());
+        var payment = $('#payment').val();
+        var payment_re = payment.replace(',', '');
+        payment_re = parseFloat(payment_re);
+
+        Deposit = (payment_re / 100) * Deposit;
+
+        // var total = payment_re - Deposit;
+        $('#Deposit_Show').val(Math.ceil(Deposit));
+        // alert(Deposit);
+    });
+
+
+
 
     $(document).on('click', '#tags', function() {
         $('#s_product').click();
     })
     $("#Member_Pay").on("change", function() {
-        var payment = $(".payment").val();
+        var Deposit_Show = $(".Deposit_Show").val();
+
         // var ret = "data-123".replace('data-','');
-        var payment_re = payment.replace(',', '');
+        var Deposit_Show_Re = Deposit_Show.replace(',', '');
         var Member_Pay = $(this).val();
-        var payment_con = parseFloat(payment_re);
+        var Deposit_Show_Con = parseFloat(Deposit_Show_Re);
         var Member_Pay_con = parseFloat(Member_Pay);
+
 
         // console.log(payment_con);
         // console.log(Member_Pay_con);
 
-        if (payment_con <= Member_Pay_con) {
+
+        if (Deposit_Show_Con <= Member_Pay_con) {
             // document.getElementById('Enter_Sell').disabled = true;
-            var coin = Member_Pay_con - payment_con;
+            var coin = Member_Pay_con - Deposit_Show_Con;
+
 
             $(':input[type="submit"]').prop('disabled', false);
             // console.log(coin + 'เงินทอน');
@@ -659,7 +695,7 @@
         // swal(Id_Member);
         // var job = $('#' + penis_test + ' td:nth-child(2)').html();
         $.ajax({
-            url: "{{route('sell.select_member')}}",
+            url: "{{route('Preorder.select_member')}}",
             method: "POST",
             data: {
                 Id_Member: Id_Member,
@@ -673,7 +709,7 @@
         })
 
         $.ajax({
-            url: "{{route('sell.Select_Discount')}}",
+            url: "{{route('Preorder.Select_Discount')}}",
             method: "POST",
             data: {
                 Id_Member: Id_Member,
@@ -708,7 +744,7 @@
         // swal(Id_Member);
         // var job = $('#' + penis_test + ' td:nth-child(2)').html();
         $.ajax({
-            url: "{{route('sell.select_id_member')}}",
+            url: "{{route('Preorder.select_id_member')}}",
             method: "POST",
             data: {
                 Id_Member: Id_Member,
@@ -816,7 +852,7 @@
 
 
                         $.ajax({
-                            url: "{{route('sell.select_promotion_payment')}}",
+                            url: "{{route('Preorder.select_promotion_payment')}}",
                             method: "POST",
                             data: {
                                 sub_Id_Brand: sub_Id_Brand,
@@ -850,49 +886,22 @@
         var test = $(this).closest('tr')
         let Id_Promotion_Product = test.find("input[name='Id_Promotion_Product_inp[]']").val();
 
-        let Id_Lot = test.find("input[name='Id_Lot[]']").val();
-        // var Id_Brand_Promo = $(this).val();
-        var sub_Id_Lot = Id_Lot.substring(0, 14);
 
-        var arr_product = [];
-        var arr_lot = [];
+
+
         $('.Id_Product_Sell').each(function() {
-            arr_product.push($(this).val());
-
-            // if (Id_Product == Id_Product_Sell && Id_Lot == Id_Lot_Product) {
-            //     swal('เลือกสินค้าซ้ำ');
-            //     chk1 = true;
-            //     return false;
-            // };
-
-        });
-        $('.Id_Lot_Product').each(function() {
-            arr_lot.push($(this).val());
-
-            // var sub_Id_Lot_Product = Id_Lot_Product.substring(0, 14);
-        });
-
-        for (let i = 0; i < arr_lot.length; i++) {
-
-            if (arr_lot[i] == Id_Lot && arr_product[i] == Id_Product) {
+            // arr_product.push($(this).val());
+            Id_Product_Sell = $(this).val();
+            if (Id_Product == Id_Product_Sell) {
                 swal('เลือกสินค้าซ้ำ');
                 chk1 = false;
-                break;
-            }
+                return false;
+            };
 
-
-        }
-
-
+        });
 
 
 
-        var Amount_Sell = value.find("input[name='Amount_Sell[]']").val();
-
-        if (Amount_Sell == 0) {
-            swal('สินค้าหมด');
-            exit();
-        }
 
 
         var rowid = $('#body_product tr:last-child').attr('id');
@@ -906,18 +915,17 @@
         }
         // console.log(rowid);
 
-
+        // console.log(Id_Product);
 
         if (chk1 == true) {
             if (typeof Id_Promotion_Product === "undefined") {
+
                 $.ajax({
-                    url: "{{route('sell.select_Id_Product')}}",
+                    url: "{{route('Preorder.select_Id_Product')}}",
                     method: "POST",
                     data: {
                         Id_Product: Id_Product,
-                        Id_Lot: Id_Lot,
                         rowid: rowid,
-                        Amount_Sell: Amount_Sell,
                         _token: _token
                     },
                     success: function(result) {
@@ -938,7 +946,7 @@
                 });
 
                 $.ajax({
-                    url: "{{route('sell.select_Promotion_Product')}}",
+                    url: "{{route('Preorder.select_Promotion_Product')}}",
                     method: "POST",
                     data: {
                         rowid: rowid,
@@ -953,13 +961,10 @@
 
                 // swal(Id_Promoiton_Product);
                 $.ajax({
-                    url: "{{route('sell.select_Id_Product')}}",
+                    url: "{{route('Preorder.select_Id_Product')}}",
                     method: "POST",
                     data: {
-
                         Id_Product: Id_Product,
-                        Id_Lot: Id_Lot,
-                        Amount_Sell: Amount_Sell,
                         rowid: rowid,
                         _token: _token
                     },
@@ -984,10 +989,9 @@
                 });
 
                 $.ajax({
-                    url: "{{route('sell.select_Promotion_Product')}}",
+                    url: "{{route('Preorder.select_Promotion_Product')}}",
                     method: "POST",
                     data: {
-                        Id_Lot: Id_Lot,
                         rowid: rowid,
                         Id_Promotion_Product: Id_Promotion_Product,
                         _token: _token
@@ -1043,9 +1047,9 @@
             $('.rows' + rowid).each(function() {
                 console.log(rowid);
                 No++;
-                var varcount = $('.' + rowid +'.Premium_Pro' + No).val();
-                
-                $('.' + rowid +'.No' + No).val(input_approve * varcount);
+                var varcount = $('.' + rowid + '.Premium_Pro' + No).val();
+
+                $('.' + rowid + '.No' + No).val(input_approve * varcount);
 
 
             });
@@ -1160,7 +1164,7 @@
         // var job = $('#' + penis_test + ' td:nth-child(2)').html();
 
         $.ajax({
-            url: "{{route('sell.Detail_Promotion_Products')}}",
+            url: "{{route('Preorder.Detail_Promotion_Products')}}",
             method: "POST",
             data: {
                 Id_Promotion: Id_Promotion,
@@ -1184,7 +1188,7 @@
         // var job = $('#' + penis_test + ' td:nth-child(2)').html();
 
         $.ajax({
-            url: "{{route('sell.Detail_Promotion_Payments')}}",
+            url: "{{route('Preorder.Detail_Promotion_Payments')}}",
             method: "POST",
             data: {
                 Id_Promotion: Id_Promotion,
@@ -1210,7 +1214,7 @@
 
         // alert(Id_Promotion_Product);
         $.ajax({
-            url: "{{route('sell.select_Promotion_Product')}}",
+            url: "{{route('Preorder.select_Promotion_Product')}}",
             method: "POST",
             data: {
                 Id_Promotion_Product: Id_Promotion_Product,

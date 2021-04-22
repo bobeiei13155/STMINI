@@ -35,22 +35,22 @@ class PromotionController extends Controller
 
                 $searchPOP = $request->searchPOP;
                 $producttest = DB::table('promotion_prods')->orderBy('promotion_prods.Id_Promotion', 'DESC')
-                    ->join('products', 'promotion_prods.Id_Product', "LIKE", 'products.Id_Product')
+                    ->join('products', 'promotions.Id_Product', "LIKE", 'products.Id_Product')
                     ->join('promotions', 'promotion_prods.Id_Promotion', "LIKE", 'promotions.Id_Promotion')
                     ->select(
-                        'promotion_prods.Id_Product',
+                        'promotions.Id_Product',
                         'products.Id_Product',
                         'promotion_prods.Id_Promotion',
                         'promotions.Id_Promotion',
                         'products.Name_Product'
                     )
 
-                    ->where('promotions.Status', '=', 0)->distinct('promotion_prods.Id_Product')->get();
+                    ->where('promotions.Status', '=', 0)->distinct('promotions.Id_Product')->get();
                 $Promotion = DB::table('promotion_prods')->orderBy('promotion_prods.Id_Promotion', 'DESC')
-                    ->join('products', 'promotion_prods.Id_Product', "LIKE", 'products.Id_Product')
+                    ->join('products', 'promotions.Id_Product', "LIKE", 'products.Id_Product')
                     ->join('promotions', 'promotion_prods.Id_Promotion', "LIKE", 'promotions.Id_Promotion')
                     ->select(
-                        'promotion_prods.Id_Product',
+                        'promotions.Id_Product',
                         'products.Id_Product',
                         'promotion_prods.Id_Promotion',
                         'promotions.Id_Promotion',
@@ -67,7 +67,7 @@ class PromotionController extends Controller
                     ->orwhere('promotions.Name_Promotion', "LIKE", "%{$searchPOP}%")
                     ->orwhere('promotions.Sdate_Promotion', "LIKE", "%{$searchPOP}%")
                     ->orwhere('promotions.Edate_Promotion', "LIKE", "%{$searchPOP}%")
-                    ->distinct('promotion_prods.Id_Product')->paginate(5);
+                    ->distinct('promotions.Id_Product')->paginate(5);
                 $product = Product::all();
                 $PremiumPro = PremiumPro::all();
 
@@ -92,17 +92,17 @@ class PromotionController extends Controller
             if (session()->has('loginpermission6')) {
                 $product = Product::all();
                 $producttest = DB::table('promotion_prods')->orderBy('promotion_prods.Id_Promotion', 'DESC')
-                    ->join('products', 'promotion_prods.Id_Product', "LIKE", 'products.Id_Product')
                     ->join('promotions', 'promotion_prods.Id_Promotion', "LIKE", 'promotions.Id_Promotion')
+                    ->join('products', 'promotions.Id_Product', "LIKE", 'products.Id_Product')
                     ->select(
-                        'promotion_prods.Id_Product',
+                        'promotions.Id_Product',
                         'products.Id_Product',
                         'promotion_prods.Id_Promotion',
                         'promotions.Id_Promotion',
                         'products.Name_Product'
                     )
 
-                    ->where('promotions.Status', '=', 0)->distinct('promotion_prods.Id_Product')->get();
+                    ->where('promotions.Status', '=', 0)->distinct('promotions.Id_Product')->get();
 
                 //  dd( $producttest);
                 $PremiumPro = PremiumPro::all();
@@ -171,13 +171,11 @@ class PromotionController extends Controller
         $request->validate([
 
             'Name_Promotion' => 'required|unique:promotions',
-            'Sdate_Promotion' => 'required',
-            'Edate_Promotion' => 'required',
-            'Id_Product' => 'required'
 
         ]);
         $promotions = new promotion;
         $promotions->Id_Promotion = $Id_Promotion;
+        $promotions->Id_Product =  $request->Id_Product;
         $promotions->Name_Promotion = $request->Name_Promotion;
         $promotions->Sdate_Promotion = $request->Sdate_Promotion;
         $promotions->Edate_Promotion = $request->Edate_Promotion;
@@ -191,9 +189,8 @@ class PromotionController extends Controller
             $No_Promotion++;
             $request2 = array(
                 'Id_Promotion' => $Id_Promotion,
-                'Id_Product' => $request->Id_Product,
-                'No_Promotion' =>    $No_Promotion,
-                'Id_Premium_Pro' => $request['Id_Premium_Pro'][$item],
+                'No_Promotion' => $No_Promotion,
+                'Id_Premium_Pro' => $value,
                 'Amount_Premium_Pro' => $request['Amount_Premium_Pro'][$item]
 
             );
@@ -201,6 +198,7 @@ class PromotionController extends Controller
             // print_r($request2);
 
             promotion_prod::create($request2);
+            // DB::table('promotion_prods')->insert([$request2]);
         }
 
 
@@ -221,19 +219,20 @@ class PromotionController extends Controller
 
                 $Promotion_Prod = promotion_prod::all();
 
-                $join = DB::table('promotion_prods')
-                    ->join('products', 'products.Id_Product', '=', 'promotion_prods.Id_Product')
-                    ->select('products.Name_Product', 'promotion_prods.Id_Product', 'products.Id_Product')
+                $join = DB::table('promotions')
+                    ->join('products', 'products.Id_Product', '=', 'promotions.Id_Product')
+                    ->select('products.Name_Product', 'promotions.Id_Product', 'products.Id_Product')
                     ->where('Id_Promotion', $Id_Promotion)->get();
+
                 $joinpro = $join[0]->Id_Product;
 
                 $join1 = DB::table('promotion_prods')
                     ->join('premium_pros', 'premium_pros.Id_Premium_Pro', '=', 'promotion_prods.Id_Premium_Pro')
                     ->select('premium_pros.Name_Premium_Pro', 'promotion_prods.Id_Premium_Pro', 'premium_pros.Id_Premium_Pro', 'promotion_prods.Amount_Premium_Pro')
-                    ->where('Id_Promotion', $Id_Promotion)->get();
+                    ->where('promotion_prods.Id_Promotion', $Id_Promotion)->get();
 
                 $joinpre = $join1[0]->Id_Premium_Pro;
-
+                // dd($join1);
 
                 return view("Stminishow.EditPromotionProForm", ['promotions' => $Promotion])->with('joinpro', $joinpro)
                     ->with('join1', $join1)
@@ -251,9 +250,10 @@ class PromotionController extends Controller
     public function updatePro(Request $request, $Id_Promotion)
     {
         $request->validate([]);
-
+        $No_Promotion = 0;
         $promotions = promotion::find($Id_Promotion);
         $promotions->Name_Promotion = $request->Name_Promotion;
+        $promotions->Id_Product = $request->Id_Product;
         $promotions->Sdate_Promotion = $request->Sdate_Promotion;
         $promotions->Edate_Promotion = $request->Edate_Promotion;
         $promotions->save();
@@ -261,25 +261,28 @@ class PromotionController extends Controller
         $data = DB::table('promotion_prods')
             ->select('Id_Promotion')
             ->where('Id_Promotion', '=', $Id_Promotion)->get();
-
+        // dd($data);
 
         $data1 = json_decode(json_encode($data), true);
         promotion_prod::destroy([$data1]);
 
         foreach ($request['Id_Premium_Pro'] as $item => $value) {
+            $No_Promotion++;
             $request2 = array(
                 'Id_Promotion' => $Id_Promotion,
-                'Id_Product' => $request->Id_Product,
-                'Id_Premium_Pro' => $request['Id_Premium_Pro'][$item],
+                'No_Promotion' => $No_Promotion,
+                'Id_Premium_Pro' => $value,
                 'Amount_Premium_Pro' => $request['Amount_Premium_Pro'][$item]
-
-
-
             );
 
 
             promotion_prod::create($request2);
         }
+
+
+
+
+
 
         return redirect('/Stminishow/ShowPromotionPro');
     }
@@ -440,7 +443,7 @@ class PromotionController extends Controller
                 'Amount_Premium_Pro' => $request['Amount_Premium_Pro'][$item]
 
             );
-            // dd( $request2);
+            // dd($request2);
 
             promotion_payments::create($request2);
         }
@@ -498,10 +501,12 @@ class PromotionController extends Controller
      */
     public function updatePay(Request $request, $Id_Promotion)
     {
+        $No_Promotion = 0;
         $request->validate([]);
 
         $promotionpays = promotionpays::find($Id_Promotion);
         $promotionpays->Id_Promotion = $Id_Promotion;
+        $promotionpays->Brand_Id = $request->Brand_Id;
         $promotionpays->Name_Promotion = $request->Name_Promotion;
         $promotionpays->Sdate_Promotion = $request->Sdate_Promotion;
         $promotionpays->Edate_Promotion = $request->Edate_Promotion;
@@ -516,8 +521,10 @@ class PromotionController extends Controller
         promotion_payments::destroy([$data1]);
 
         foreach ($request['Id_Premium_Pro'] as $item => $value) {
+            $No_Promotion++;
             $request2 = array(
                 'Id_Promotion' => $Id_Promotion,
+                'No_Promotion' =>    $No_Promotion,
                 'Id_Premium_Pro' => $value,
                 'Amount_Premium_Pro' => $request['Amount_Premium_Pro'][$item]
 

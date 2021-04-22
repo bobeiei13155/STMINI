@@ -281,38 +281,7 @@ class ReceiptController extends Controller
     public function store_receipt(Request $request)
     {
 
-        // $gen_re  = DB::table('receipts')->join('receipt_lists', 'receipt_lists.Id_Receipt', '=', 'receipts.Id_Receipt')
-        //     ->where('receipt_lists.Id_Order', '=', $request->Id_Order)
-        //     ->select('receipt_lists.Id_Order', 'receipt_lists.Id_Receipt')
-        //     ->groupBy('receipt_lists.Id_Order', 'receipt_lists.Id_Receipt')->get();
-        // // dd($gen_re);
-        // if ($gen_re->isEmpty()) {
-        //     // $gen_re = 1;
-        //     // dd($gen_re);
-        //     $GenId = DB::table('receipts')->max('Id_Receipt');
-        //     $GenId_Receipt = substr($GenId, 11, 14) + 1;
-        //     if (is_null($GenId)) {
-        //         $Id_Receipt = "REP" . "-" . date('Y') . date('m') . "-" . "000";
-        //     } else {
-
-        //         if ($GenId_Receipt < 10) {
-        //             $Id_Receipt = "REP" . "-" . date('Y') . date('m') . "-" . "00" . $GenId_Receipt;
-        //         } elseif ($GenId_Receipt >= 10 && $GenId_Receipt < 100) {
-        //             $Id_Receipt = "REP" . "-" . date('Y') . date('m') . "-" . "0" . $GenId_Receipt;
-        //         } elseif ($GenId_Receipt >= 100) {
-        //             $Id_Receipt = "REP" . "-" . date('Y') . date('m') . "-" . $GenId_Receipt;
-        //         }
-        //     }
-        //     $Id_Receipt = json_decode(json_encode($Id_Receipt), true);
-        // } else {
-        //     $Id_Receipt = $gen_re[0]->Id_Receipt;
-        // }
-        // dd($Id_Receipt);
-
-
-        // DB::raw('sum(preorder_lists.Amount_Preorder) as Amount_Preorder'),
-
-        // Session::put('Id_Receipt', $Id_Receipt);
+  
 
         $GenId = DB::table('receipts')->max('Id_Receipt');
         $GenId_Receipt = substr($GenId, 11, 14) + 1;

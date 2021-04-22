@@ -237,3 +237,32 @@ Route::post('/Sell/createSell/Detail_Promotion_Payments', 'Sell\SellController@D
 Route::post('/Sell/createSell/Select_Discount', 'Sell\SellController@Select_Discount')->name('sell.Select_Discount');
 Route::post('/Sell/createSell/select_promotion_payment', 'Sell\SellController@select_promotion_payment')->name('sell.select_promotion_payment');
 Route::post('/Sell/storeSell', 'Sell\SellController@storeSell');
+Route::post('/Sell/ShowSell/Detail_Sell', 'Sell\SellController@Detail_Sell')->name('sell.Detail_Sell');
+Route::get('/Sell/SellController/{Id_Sell}', 'Sell\SellController@delete_sell');
+Route::get('/Sell/Bill/{Id_Sell}', 'Sell\SellController@Bill');
+
+
+Route::get('/Preorder/ShowPreOrder', 'Preorder\PreorderController@ShowPreOrder'); //ทำสิทธิ์แล้ว
+Route::get('/Preorder/createPreorder', 'Preorder\PreorderController@createPreorder'); //ทำสิทธิ์แล้ว
+Route::post('/Preorder/createPreorder/select_member', 'Preorder\PreorderController@select_member')->name('Preorder.select_member');
+Route::post('/Preorder/createPreorder/select_id_member', 'Preorder\PreorderController@select_id_member')->name('Preorder.select_id_member');
+Route::post('/Preorder/createPreorder/select_Id_Product', 'Preorder\PreorderController@select_Id_Product')->name('Preorder.select_Id_Product');
+Route::post('/Preorder/createPreorder/Select_Discount', 'Preorder\PreorderController@Select_Discount')->name('Preorder.Select_Discount');
+Route::post('/Preorder/createPreorder/Detail_Promotion_Products', 'Preorder\PreorderController@Detail_Promotion_Products')->name('Preorder.Detail_Promotion_Products');
+Route::post('/Preorder/createPreorder/select_Promotion_Product', 'Preorder\PreorderController@select_Promotion_Product')->name('Preorder.select_Promotion_Product');
+Route::post('/Preorder/createPreorder/Detail_Promotion_Payments', 'Preorder\PreorderController@Detail_Promotion_Payments')->name('Preorder.Detail_Promotion_Payments');
+Route::post('/Preorder/createPreorder/select_promotion_payment', 'Preorder\PreorderController@select_promotion_payment')->name('Preorder.select_promotion_payment');
+Route::post('/Preorder/storePreorder', 'Preorder\PreorderController@storePreorder');
+Route::post('/Preorder/ShowPreOrder/Detail_Preorder', 'Preorder\PreorderController@Detail_Preorder')->name('Preorder.Detail_Preorder');
+Route::get('/Preorder/PreorderController/{Id_Preorder}', 'Preorder\PreorderController@delete_Preorder');
+
+
+
+
+Route::get('/Report/ShowCosttap', 'Report\ReportController@ShowCosttap'); //ทำสิทธิ์แล้ว
+Route::post('/Report/ShowCosttap/select_corttap', 'Report\ReportController@select_corttap')->name('report.select_corttap');
+
+
+
+Route::get('/Report/ShowReportSell', 'Report\ReportController@ShowReportSell'); //ทำสิทธิ์แล้ว
+Route::post('/Report/ShowReportSell', 'Report\ReportController@select_Edate');

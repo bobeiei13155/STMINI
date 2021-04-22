@@ -65,7 +65,7 @@
                                                 <th class="">สินค้าของแถม</th>
                                                 <th></th>
                                                 <th> <button type="button" class="btn btn-success addRowpermium_pro"><i class="fas fa-plus"></i></button></th>
-                                              
+
                                             </tr>
                                             <tr>
                                                 <div class="row">
@@ -134,5 +134,11 @@
     $(document).on('click', '.remove', function() {
         $(this).parent().parent().remove();
     });
+
+    $('#Sdate_Promotion').change(function() {
+        var Sdate_Promotion = $(this).val();
+
+        document.getElementById("Edate_Promotion").min = Sdate_Promotion;
+    })
 </script>
 @endsection

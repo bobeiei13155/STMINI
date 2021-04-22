@@ -20,24 +20,25 @@
         </header>
         <div class="row">
             <div class="col-lg-10">
-                <div class="card">
-                    <div class="card-header  align-items-center">
-                        <div class="row">
-                            <div class="col">
-                                <h4>ID : {{Session::get('Id_Product')}}</h4>
-                            </div>
-                            <div class="col-md-3 text-right">
-                                <select class="form-control" name="Statuspre">
-                                    <option value="">เลือกสถานะการสั่งจอง</option>
-                                    <option value="0">สั่งจองสินค้าได้</option>
-                                    <option value="1">ไม่สามารถสั่งจองสินค้าได้</option>
+                <form action="/Stminishow/createProduct" method="post" enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="card-header  align-items-center">
+                            <div class="row">
+                                <div class="col">
+                                    <h4>ID : {{Session::get('Id_Product')}}</h4>
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <select class="form-control" name="Statuspre" required>
+                                        <option value="">เลือกสถานะการสั่งจอง</option>
+                                        <option value="0">สั่งจองสินค้าได้</option>
+                                        <option value="1">ไม่สามารถสั่งจองสินค้าได้</option>
 
-                                </select>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <form action="/Stminishow/createProduct" method="post" enctype="multipart/form-data">
+                        <div class="card-body">
+
                             {{csrf_field()}}
                             <div class="form-group">
                                 <div class="row">
@@ -129,11 +130,15 @@
                             <br>
                             <button type="submit" name="submit" id="submit" class="btn btn-success"> <i class="fas fa-plus" style="margin-right: 5px;"></i>เพิ่ม</button>
                             <a class="btn btn-danger my-2" href="/Stminishow/ShowProduct"> <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>กลับ</a>
-                        </form>
+
+                        </div>
+
                     </div>
-                </div>
+                </form>
             </div>
+
         </div>
+
     </div>
 </section>
 

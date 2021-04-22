@@ -20,35 +20,36 @@
         </header>
         <div class="row">
             <div class="col-lg-10">
-                <div class="card">
-                    <div class="card-header  align-items-center">
-                        <div class="row">
-                            <div class="col">
-                                <h4>ID : {{$products->Id_Product}}</h4>
-                            </div>
-                            <div class="col-md-3 text-right">
-                                <select class="form-control" name="Statuspre">
-                                    @if($products->Statuspre == "0" ){
-                                    <option value="0" selected>
-                                        สั่งจองสินค้าได้
-                                    </option>
-                                    <option value="1">ไม่สามารถสั่งจองสินค้าได้</option>
-                                    }@else{
+                <form action="/Stminishow/updateProduct/{{$products->Id_Product}}" method="post" enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="card-header  align-items-center">
+                            <div class="row">
+                                <div class="col">
+                                    <h4>ID : {{$products->Id_Product}}</h4>
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <select class="form-control" name="Statuspre">
+                                        @if($products->Statuspre == "0" ){
+                                        <option value="0" selected>
+                                            สั่งจองสินค้าได้
+                                        </option>
+                                        <option value="1">ไม่สามารถสั่งจองสินค้าได้</option>
+                                        }@else{
 
-                                    <option value="1" selected>
-                                        ไม่สามารถสั่งจองสินค้าได้
-                                    </option>
-                                    <option value="0">สั่งจองสินค้าได้</option>
-                                    }
-                                    @endif
+                                        <option value="1" selected>
+                                            ไม่สามารถสั่งจองสินค้าได้
+                                        </option>
+                                        <option value="0">สั่งจองสินค้าได้</option>
+                                        }
+                                        @endif
 
 
-                                </select>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <form action="/Stminishow/updateProduct/{{$products->Id_Product}}" method="post" enctype="multipart/form-data">
+                        <div class="card-body">
+
                             {{csrf_field()}}
                             <div class="form-group">
                                 <div class="row">
@@ -167,9 +168,10 @@
                             <br>
                             <button type="submit" name="submit" id="submit" class="btn btn-success"> <i class="fas fa-pen" style="margin-right: 5px;"></i>แก้ไข</button>
                             <a class="btn btn-danger my-2" href="/Stminishow/ShowProduct"> <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>กลับ</a>
-                        </form>
+
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

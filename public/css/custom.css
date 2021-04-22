@@ -49,3 +49,14 @@ input.largerCheckbox {
     border-radius: 0px 10px 10px 0px;
 }
 
+
+
+body {
+    width: 550px;
+    margin: 3rem auto;
+}
+
+#chart-container {
+    width: 100%;
+    height: auto;
+}

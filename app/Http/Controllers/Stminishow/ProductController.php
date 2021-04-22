@@ -126,7 +126,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
+       
         $request->validate([
 
             'Name_Product' => 'required',
@@ -257,6 +257,7 @@ class ProductController extends Controller
     public function update(Request $request, $Id_Product)
     {
         // dd($request);
+        //  dd($request->Statuspre);
         $request->validate([
             'Name_Product' => 'required',
             'Category_Id' => 'required',

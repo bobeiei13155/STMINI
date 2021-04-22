@@ -142,5 +142,12 @@
     $(document).on('click', '.remove', function() {
         $(this).parent().parent().remove();
     });
+
+
+    $('#Sdate_Promotion').change(function() {
+        var Sdate_Promotion = $(this).val();
+
+        document.getElementById("Edate_Promotion").min = Sdate_Promotion;
+    })
 </script>
 @endsection
