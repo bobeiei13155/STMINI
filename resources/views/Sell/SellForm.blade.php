@@ -63,7 +63,7 @@
                                         <label for="radioCustom2">ลูกค้าสมาชิก</label>
                                     </div>
                                 </div>
-
+    
                                 <div class="input-group col-sm-3">
                                     <input type="text" class="form-control a1 text-center" id="member" name="member" value="" placeholder="--->ชื่อลูกค้าสมาชิก<---" style="color:#495057 ;background-color: #E8ECEE; border-radius: 10px 0px 0px 10px;" disabled>
                                     <input type="hidden" class="form-control " id="id_member" name="id_member" value="">
@@ -182,7 +182,7 @@
             <div role="document" class="modal-dialog modal-lg">
                 <div class="modal-content" style="width: auto;">
                     <div class="modal-header">
-                        <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#F0B71A; padding-right: 8px; "></i>รายละเอียดโปรโมชั่นยอดชำระ</h5>
+                        <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#6586FA; padding-right: 8px; "></i>รายละเอียดโปรโมชั่นยอดชำระ</h5>
                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                     </div>
                     <div class="modal-body">
@@ -538,7 +538,7 @@
             <div role="document" class="modal-dialog modal-lg">
                 <div class="modal-content" style="width: auto;">
                     <div class="modal-header">
-                        <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#F0B71A; padding-right: 8px; "></i>รายละเอียดโปรโมชั่นยอดชำระ</h5>
+                        <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#F0B71A; padding-right: 8px; "></i>รายละเอียดโปรโมชั่นของแถม</h5>
                         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
                     </div>
                     <div class="modal-body">
@@ -1219,6 +1219,7 @@
 
 
     });
+
 
 
     $(document).on("click", ".ID_Promotion_Payment", function() {

@@ -51,11 +51,6 @@ class SellController extends Controller
         if (session()->has('login')) {
             if (session()->has('loginpermission12')) {
 
-
-
-
-
-
                 $sells = DB::select(DB::raw("SELECT sells.Id_Sell , FName_Emp , IFNULL(FName_Member,'ลูกค้าทั่วไป') as Name_Member,Sell_Date,Payment FROM sells 
                 JOIN payments on payments.Id_Payment = sells.Id_Payment 
                 JOIN employees on employees.Id_Emp = sells.Id_Emp 
@@ -220,33 +215,7 @@ where sell_lists.Id_Sell ='" . $Id_Sell . "'
 
 
         foreach ($sells as  $row) {
-            $output .= ' <div class="row ">';
-            $output .= ' <div class="input-group col-sm-6 ">';
-            $output .= ' <div class="input-group-prepend"> ';
-            $output .= '  <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:120px">รหัสใบเสร็จ :</span> </div>';
-            $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Product" id="Ip_Id_Promotion_Product" value="' . $Id_Sell . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
-            $output .= '  </div>';
-            $output .= ' <div class="input-group col-sm-6 ">';
-            $output .= ' <div class="input-group-prepend"> ';
-            $output .= '  <span class="input-group-text a1"  id="inputGroup-sizing-default" style="width:120px">ยอดรวม :</span> </div>';
-            $payment = number_format($row->Payment, 2);
-            $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Product" id="Ip_Id_Promotion_Product" value="' . $payment . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
-            $output .= '  </div>';
-            $output .= '  </div>';
-            $output .= '  <br>';
-            $output .= ' <div class="row ">';
-            $output .= ' <div class="input-group col-sm-6 ">';
-            $output .= ' <div class="input-group-prepend"> ';
-            $output .= '  <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:120px">วันที่ :</span> </div>';
-            $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Product" id="Ip_Id_Promotion_Product" value="' . substr($row->Sell_Date, 0, 10) . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
-            $output .= '  </div>';
-            $output .= ' <div class="input-group col-sm-6 ">';
-            $output .= ' <div class="input-group-prepend"> ';
-            $output .= '  <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:120px">เวลา :</span> </div>';
-            $output .= '  <input type="text" class="form-control" name="Ip_Id_Promotion_Product" id="Ip_Id_Promotion_Product" value="' . substr($row->Sell_Date, 10) . '" style="background-color: #E8ECEE; border-radius: 0px 10px 10px 0px; " readonly>';
-            $output .= '  </div>';
-            $output .= '  </div>';
-            $output .= '  <br>';
+        
             $output .= ' <div class="row ">';
             $output .= ' <div class="input-group col-sm-6 ">';
             $output .= ' <div class="input-group-prepend"> ';
@@ -983,9 +952,6 @@ where sell_lists.Id_Sell ='" . $Id_Sell . "'
 
             $output .= '<tr id="rowp' . $rowid . '" >';
             $output .= '<td scope="row" width="6%"><img src="http://127.0.0.1:8000/storage/Products_image/' . $row->Img_Product . '" alt="" width="80px" height="90px"></td>';
-
-
-
 
             $output .= ' <td scope="row" width="9%" ><input type="text" class="form-control text-center noHover"  value="' . $row->Name_Product . '"  style="" disabled>';
 

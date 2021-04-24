@@ -368,6 +368,7 @@ class ReceiptController extends Controller
                 'Id_Lot' => $Id_Lot,
                 'No_Receipt' => $No_Receipt,
                 'Amount_Lot' => $value,
+                'Amount_Total' => $value,
                 'Id_Product' => $Id_Product_Receipt[$item],
                 'Cost' => $Cost_Receipt[$item]
             );
@@ -381,7 +382,7 @@ class ReceiptController extends Controller
             ])->update(['Amount_Remain' => $Amount_Remain[$item] - $value]); ///////////////////////////////////////
         }
 
-
+        
 
         $Q = DB::table('orders')->join('order_lists', 'order_lists.Id_Order', '=', 'orders.Id_Order')
             ->select(DB::raw('sum(order_lists.Amount_Remain) as Amount_Remain'))

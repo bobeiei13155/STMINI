@@ -262,6 +262,13 @@ Route::get('/Preorder/PreorderController/{Id_Preorder}', 'Preorder\PreorderContr
 Route::get('/Claim/ShowClaim', 'Claim\ClaimController@ShowClaim'); //ทำสิทธิ์แล้ว
 Route::get('/Claim/createClaim', 'Claim\ClaimController@createClaim'); //ทำสิทธิ์แล้ว
 Route::post('/Claim/createClaim/select_Id_Sell', 'Claim\ClaimController@select_Id_Sell')->name('Claim.select_Id_Sell');
+Route::post('/Claim/createClaim/select_Id_Product', 'Claim\ClaimController@select_Id_Product')->name('Claim.select_Id_Product');
+Route::post('/Claim/createClaim/select_Id_Product_Show', 'Claim\ClaimController@select_Id_Product_Show')->name('Claim.select_Id_Product_Show');
+Route::post('/Claim/storeClaim', 'Claim\ClaimController@storeClaim');
+Route::post('/Claim/ShowClaim/Detail_Claim', 'Claim\ClaimController@Detail_Claim')->name('Claim.Detail_Claim');
+
+
+
 
 
 Route::get('/Report/ShowCosttap', 'Report\ReportController@ShowCosttap'); //ทำสิทธิ์แล้ว
@@ -270,3 +277,16 @@ Route::post('/Report/ShowCosttap/select_corttap', 'Report\ReportController@selec
 
 Route::get('/Report/ShowReportSell', 'Report\ReportController@ShowReportSell'); //ทำสิทธิ์แล้ว
 Route::post('/Report/ShowReportSell', 'Report\ReportController@select_Edate');
+
+
+Route::get('/Report/ShowClaim', 'Report\ReportController@ShowClaim'); //ทำสิทธิ์แล้ว
+Route::post('/Report/Select_Claim', 'Report\ReportController@Select_Claim');
+
+
+Route::get('/Report/ShowPromotion', 'Report\ReportController@ShowPromotion'); //ทำสิทธิ์แล้ว
+Route::post('/Report/Select_Promotion', 'Report\ReportController@Select_Promotion'); //ทำสิทธิ์แล้ว
+Route::post('/Report/Select_Premium_Product', 'Report\ReportController@Select_Premium_Product'); //ทำสิทธิ์แล้ว
+Route::post('/Report/ShowPromotion/Detail_Promotion_Products', 'Report\ReportController@Detail_Promotion_Products')->name('Report.Detail_Promotion_Products');
+Route::post('/Report/ShowPromotion/Detail_Promotion_Payments', 'Report\ReportController@Detail_Promotion_Payments')->name('Report.Detail_Promotion_Payments');
+
+Route::get('/Show_Product/Show_Product', 'Show_Product\Show_ProductController@Show_Product'); //ทำสิทธิ์แล้ว

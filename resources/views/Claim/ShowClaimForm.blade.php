@@ -33,16 +33,25 @@
           <thead>
             <tr>
               <th>รหัสใบเคลม</th>
-              <th>ชื่อพนักขาย</th>
+              <th>ชื่อพนักงาน</th>
               <th>ชื่อลูกค้า</th>
               <th>วันที่เคลมสินค้า</th>
-              <th>วันที่รับสินค้าเคลม</th>
               <th>รายละเอียด</th>
-              <th>ยกเลิก</th>
+
             </tr>
           </thead>
           <tbody>
-           
+            @foreach($claims as $claim)
+            <tr>
+              <td>{{$claim->Id_Claim}}</td>
+              <td>{{$claim->FName_Emp}}</td>
+              <td>{{$claim->FName_Member}}</td>
+              <td>{{$claim->Claim_Date}}</td>
+              <td> <button type="button" data-toggle="modal" data-target="#myModal" class="col-auto btn btn-warning Id_Claim_Show" style="border-radius: 5px; width: 140px; " id="{{$claim->Id_Claim}}"> <i class="fas fa-eye" style="margin-right: 5px;"></i> ดูรายละเอียด </button></td>
+
+
+            </tr>
+            @endforeach
           </tbody>
         </table>
 
@@ -51,11 +60,11 @@
         <div role="document" class="modal-dialog modal-xl">
           <div class="modal-content" style="width: auto;">
             <div class="modal-header">
-              <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#F0B71A; padding-right: 8px; "></i>รายละเอียดใบเสร็จ</h5>
+              <h5 id="exampleModalLabel" class="modal-title"><i class="fas fa-star" style="color:#F0B71A; padding-right: 8px; "></i>รายละเอียดการเคลม</h5>
               <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body ">
-              <div class="Show_Sell">
+              <div class="Show_Claim">
 
               </div>
             </div>
@@ -76,27 +85,27 @@
   });
 
 
-  $(document).on("click", ".", function() {
+  $(document).on("click", ".Id_Claim_Show", function() {
 
-    var Id_Sell = $(this).attr("Id");
-    
+    var Id_Claim = $(this).attr("Id");
     var _token = $('input[name="_token"]').val();
     // swal(Id_Sell);
     // var job = $('#' + penis_test + ' td:nth-child(2)').html();
-    // $.ajax({
-    //   url: "{{route('sell.Detail_Sell')}}",
-    //   method: "POST",
-    //   data: {
-    //     Id_Sell: Id_Sell,
-    //     _token: _token
-    //   },
-    //   success: function(result) {
-    //     $('.Show_Sell').html(result);
+    $.ajax({
+      url: "{{route('Claim.Detail_Claim')}}",
+      method: "POST",
+      data: {
+        Id_Claim: Id_Claim,
+        _token: _token
+      },
+      success: function(result) {
+        $('.Show_Claim').html(result);
 
-    //   }
-    // })
+      }
+    })
   });
 
 
+  
 </script>
 @endsection

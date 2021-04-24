@@ -157,8 +157,8 @@
               <li><a href="/Report/ShowCosttap">ปริมาณยอดขายประจำปี</a></li>
               <li><a href="#">รายได้และกำไรตามช่วง</a></li>
               <li><a href="/Report/ShowReportSell">จำนวนสินค้าที่ขายได้</a></li>
-              <li><a href="#">ยอดการใช้โปรโมชั่น</a></li>
-              <li><a href="#">การเคลมสินค้าแต่ละประเภท</a></li>
+              <li><a href="/Report/ShowPromotion">ยอดการใช้โปรโมชั่น</a></li>
+              <li><a href="/Report/ShowClaim">การเคลมสินค้าแต่ละประเภท</a></li>
 
             </ul>
           </li>

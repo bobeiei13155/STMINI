@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <!-- Page Header-->
             <header>
-                <h1 class="h1 display">ขายสินค้า</h1>
+                <h1 class="h1 display">เคลมสินค้า</h1>
             </header>
             <textarea id="chk_Payment" name="chk_Payment" rows="10" hidden>
 
@@ -115,7 +115,6 @@
                                         <th scope="col" width="5%">ราคา</th>
                                         <th scope="col" width="5%">จำนวน</th>
                                         <th scope="col" width="5%">ราคารวม</th>
-                                        <th scope="col" width="5%">วันที่หมดประกัน</th>
                                         <th scope="col" width="5%">ลบ</th>
                                     </tr>
 
@@ -132,7 +131,7 @@
             </div>
             <div class="col-sm-4">
 
-                <button type="submit" name="Enter_Sell" id="Enter_Sell" class="btn btn-primary " style="width:100%; height:40px; background-color: #42A667; border-color: #42A667; border-radius: 10px;" disabled><i class="fas fa-cash-register fa-2x"></i> </button>
+                <button type="submit" name="Enter_Claim" id="Enter_Claim" class="btn btn-warning " style="width:100px;   border-radius: 10px;"><i class="fas fa-wrench fa-2x"></i> </button>
 
             </div>
         </div>
@@ -153,7 +152,7 @@
                                     <th>รหัสใบเสร็จ</th>
                                     <th>ชื่อพนักขาย</th>
                                     <th>ชื่อลูกค้า</th>
-                                    <th>ดูรายละเอียดห</th>
+                                    <th>ดูรายละเอียด</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -204,6 +203,33 @@
                 </div>
             </div>
 
+            <div id="myModal_Product_Lot" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                <div role="document" class="modal-dialog modal-lg">
+                    <div class="modal-content" style="width: auto;">
+                        <div class="modal-header">
+                            <h5 id="exampleModalLabel" class="modal-title">รายละเอียดล็อตสินค้า</h5>
+                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <table class="table text-center" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th width="9%">ชื่อสินค้า</th>
+                                        <th width="6%">ราคาสินค้า</th>
+                                        <th width="6%">จำนวนสินค้าในคลัง</th>
+                                        <th width="2%">เลือก</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="Show_Product_Lot">
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
     </form>
@@ -231,26 +257,87 @@
         $('#s_product').click();
     })
 
-    $(document).on("click", ".select_Id_Product", function() {
-        var index = $(this).closest('tr');
-        var Id_Sell = $(this).attr("Id");
+    $(document).on("click", ".select_Id_Product_Lot", function() {
+        chk1 = true;
+        var Id_Sell = $(this).parents('tr').attr('id');
+        var Id_Product = $(this).attr("Id");
+        // var Id_Product = $('input[name="Id_Product_Lot"]').val();
         var _token = $('input[name="_token"]').val();
-        var Id_Product = index.find('input[name="Id_Product_Sell"]');
 
-        swal(Id_Product);
+        var test = $(this).closest('tr');
+        var Id_Lot = test.find('.Id_Lot_List').val();
+
+        var Amount_Claim = test.find('.Amount_Claim').val();
+
+        if(Amount_Claim  == 0){
+
+            swal('สินค้าหมด');
+            chk1 = false;
+            return false;
+        }
+
+        // $('rowp')
+        $('.rowp').each(function() {
+            chk_Id_Sell = $(this).val();
+            var test = $(this).closest('tr');
+            var chk_Id_Product = test.find('.Id_Product_Sell').val();
+            // swal(chk_Id_Product);
+            if (chk_Id_Sell != Id_Sell) {
+                swal('กรุณาน่าเลือกสินค้าใบเสร็จเดียวกัน');
+                chk1 = false;
+                return false;
+            };
+            if (Id_Product == chk_Id_Product) {
+                swal('เลือกสินค้าซ้ำ');
+                chk1 = false;
+                return false;
+            };
+        });
+        if (chk1 == true) {
+            $.ajax({
+                url: "{{route('Claim.select_Id_Product_Show')}}",
+                method: "POST",
+                data: {
+                    Id_Product: Id_Product,
+                    Id_Sell: Id_Sell,
+                    Id_Lot: Id_Lot,
+                    _token: _token
+                },
+                success: function(result) {
+                    $('#body_product').append(result);
+
+                }
+            })
+        }
         // var job = $('#' + penis_test + ' td:nth-child(2)').html();
-        // $.ajax({
-        //   url: "{{route('sell.Detail_Sell')}}",
-        //   method: "POST",
-        //   data: {
-        //     Id_Sell: Id_Sell,
-        //     _token: _token
-        //   },
-        //   success: function(result) {
-        //     $('.Show_Sell').html(result);
 
-        //   }
-        // })
+    });
+
+
+
+    $(document).on("click", ".select_Id_Product", function() {
+        var Id_Sell = $(this).parents('tr').attr('id');
+        var Id_Product = $(this).attr("Id");
+        // var Id_Product = $('input[name="Id_Product_Lot"]').val();
+        var _token = $('input[name="_token"]').val();
+
+        // var Id_Sell = index.find('input[name="Id_Sell_Lot"]').val();
+
+
+        // var job = $('#' + penis_test + ' td:nth-child(2)').html();
+        $.ajax({
+            url: "{{route('Claim.select_Id_Product')}}",
+            method: "POST",
+            data: {
+                Id_Product: Id_Product,
+                Id_Sell: Id_Sell,
+                _token: _token
+            },
+            success: function(result) {
+                $('.Show_Product_Lot').html(result);
+
+            }
+        })
     });
 
 
@@ -280,6 +367,15 @@
 
 
     });
+
+    $(document).on('click', '.remove', function() {
+
+        $(this).parent().parent().remove();
+
+    });
+
+
+
 </script>
 
 
