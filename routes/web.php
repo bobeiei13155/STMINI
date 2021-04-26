@@ -259,6 +259,18 @@ Route::get('/Preorder/PreorderController/{Id_Preorder}', 'Preorder\PreorderContr
 
 
 
+Route::get('/ReceiptPre/ShowReceiptPre', 'ReceiptPre\ReceiptPreController@ShowReceiptPre'); //ทำสิทธิ์แล้ว
+// Route::get('/ReceiptPre/ShowPromotion', 'ReceiptPre\ReceiptPreController@ShowPromotion'); //ทำสิทธิ์แล้ว
+Route::get('/ReceiptPre/receipt_preorder/{Id_Preorder}', 'ReceiptPre\ReceiptPreController@receipt_preorder');
+Route::post('/ReceiptPre/storeReceiptPreorder', 'ReceiptPre\ReceiptPreController@storeReceiptPreorder');
+
+
+
+
+
+
+
+
 Route::get('/Claim/ShowClaim', 'Claim\ClaimController@ShowClaim'); //ทำสิทธิ์แล้ว
 Route::get('/Claim/createClaim', 'Claim\ClaimController@createClaim'); //ทำสิทธิ์แล้ว
 Route::post('/Claim/createClaim/select_Id_Sell', 'Claim\ClaimController@select_Id_Sell')->name('Claim.select_Id_Sell');
@@ -288,5 +300,12 @@ Route::post('/Report/Select_Promotion', 'Report\ReportController@Select_Promotio
 Route::post('/Report/Select_Premium_Product', 'Report\ReportController@Select_Premium_Product'); //ทำสิทธิ์แล้ว
 Route::post('/Report/ShowPromotion/Detail_Promotion_Products', 'Report\ReportController@Detail_Promotion_Products')->name('Report.Detail_Promotion_Products');
 Route::post('/Report/ShowPromotion/Detail_Promotion_Payments', 'Report\ReportController@Detail_Promotion_Payments')->name('Report.Detail_Promotion_Payments');
+
+
+
+Route::get('/Report/Show_Costs', 'Report\ReportController@Show_Costs')->name('Report.Show_Costs');; //ทำสิทธิ์แล้ว
+Route::post('/Report/Select_Cost', 'Report\ReportController@Select_Cost')->name('Report.Select_Cost');; //ทำสิทธิ์แล้ว
+
+
 
 Route::get('/Show_Product/Show_Product', 'Show_Product\Show_ProductController@Show_Product'); //ทำสิทธิ์แล้ว

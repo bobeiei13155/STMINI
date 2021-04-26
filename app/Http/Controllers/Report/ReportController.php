@@ -120,6 +120,119 @@ class ReportController extends Controller
         // dd($costtap);
     }
 
+
+
+    public function Show_Costs()
+    {
+        Session()->forget("echo", "คุณไม่มีสิทธิ์");
+        if (session()->has('login')) {
+            if (session()->has('loginpermission16')) {
+
+
+
+                $report_costs = DB::select(DB::raw("SELECT c1.Id_Product , c1.Name_Product ,IFNULL(c2.Total_Price - ((c2.Amount_Sell + c2.Amount_Claim) * c2.Cost),0)  as profit_real , categories.Id_Category,categories.Name_Category
+                FROM products c1
+                LEFT JOIN 
+                (
+                SELECT lot_lists.Id_Lot , lot_lists.No_Lot , lot_lists.Id_Product , lot_lists.Cost ,
+                sell_lists.Id_Sell , sell_lists.No_Sell , sell_lists.Amount_Sell , sell_lists.Total_Price , IFNULL(claim_lists.Amount_Claim,0) as Amount_Claim ,
+                sell_lists.Total_Price - (lot_lists.Cost * sell_lists.Amount_Sell) as profit 
+                FROM lot_lists
+                JOIN sell_lists  ON lot_lists.Id_Lot = sell_lists.Id_Lot
+                                                AND lot_lists.No_Lot = sell_lists.No_Lot
+                JOIN sells ON sell_lists.Id_Sell = sells.Id_Sell
+                LEFT JOIN claim_lists ON claim_lists.Id_Sell = sell_lists.Id_Sell
+                                                            AND claim_lists.No_Sell = sell_lists.No_Sell
+                WHERE sells.`Status` = '0'
+                ) c2 ON c1.Id_Product = c2.Id_Product
+                JOIN categories on categories.Id_Category = c1.Category_Id
+                GROUP BY c1.Id_Product , c1.Name_Product , categories.Id_Category,categories.Name_Category"));
+
+                $cates = DB::select(DB::raw("SELECT Id_Category,Name_Category FROM categories 
+                "));
+
+
+                return view("report.ReportCostForm")->with('report_costs', $report_costs)->with('cates', $cates);
+            } else {
+                Session()->flash("echo", "คุณไม่มีสิทธิ์");
+                return view('layouts.stmininav');
+            }
+        } else {
+
+            return redirect('/login');
+        }
+    }
+
+
+    public function Select_Cost(Request $request)
+    {
+
+
+        $Sdate = $request->Sdate;
+        $Edate = $request->Edate;
+
+
+        if (is_null($request->cate)) {
+            $report_costs = DB::select(DB::raw("SELECT c1.Id_Product , c1.Name_Product ,IFNULL(c2.Total_Price - ((c2.Amount_Sell + c2.Amount_Claim) * c2.Cost),0)  as profit_real , categories.Id_Category,categories.Name_Category
+            FROM products c1
+            LEFT JOIN 
+            (
+            SELECT lot_lists.Id_Lot , lot_lists.No_Lot , lot_lists.Id_Product , lot_lists.Cost ,
+            sell_lists.Id_Sell , sell_lists.No_Sell , sell_lists.Amount_Sell , sell_lists.Total_Price , IFNULL(claim_lists.Amount_Claim,0) as Amount_Claim ,
+            sell_lists.Total_Price - (lot_lists.Cost * sell_lists.Amount_Sell) as profit 
+            FROM lot_lists
+            JOIN sell_lists  ON lot_lists.Id_Lot = sell_lists.Id_Lot
+                                            AND lot_lists.No_Lot = sell_lists.No_Lot
+            JOIN sells ON sell_lists.Id_Sell = sells.Id_Sell
+            LEFT JOIN claim_lists ON claim_lists.Id_Sell = sell_lists.Id_Sell
+                                                        AND claim_lists.No_Sell = sell_lists.No_Sell
+            LEFT JOIN claims on claims.Id_Claim = claim_lists.Id_Claim
+            WHERE sells.`Status` = '0'  and  (STR_TO_DATE(sells.Sell_Date,'%Y-%m-%d')  BETWEEN '" . $Sdate . "' AND '" . $Edate . "')  
+            and  (STR_TO_DATE(claims.Claim_Date,'%Y-%m-%d')  BETWEEN '" . $Sdate . "' AND '" . $Edate . "')  
+            ) c2 ON c1.Id_Product = c2.Id_Product
+            JOIN categories on categories.Id_Category = c1.Category_Id 
+            GROUP BY c1.Id_Product , c1.Name_Product, categories.Id_Category,categories.Name_Category
+    
+            "));
+
+            $cates = DB::select(DB::raw("SELECT Id_Category,Name_Category FROM categories 
+            "));
+
+            return view("report.ReportCostForm")->with('report_costs', $report_costs)->with('cates', $cates);
+        } else {
+            $cate = $request->cate;
+            $report_costs = DB::select(DB::raw("SELECT c1.Id_Product , c1.Name_Product ,IFNULL(c2.Total_Price - ((c2.Amount_Sell + c2.Amount_Claim) * c2.Cost),0)  as profit_real , categories.Id_Category,categories.Name_Category
+            FROM products c1
+            LEFT JOIN 
+            (
+            SELECT lot_lists.Id_Lot , lot_lists.No_Lot , lot_lists.Id_Product , lot_lists.Cost ,
+            sell_lists.Id_Sell , sell_lists.No_Sell , sell_lists.Amount_Sell , sell_lists.Total_Price , IFNULL(claim_lists.Amount_Claim,0) as Amount_Claim ,
+            sell_lists.Total_Price - (lot_lists.Cost * sell_lists.Amount_Sell) as profit 
+            FROM lot_lists
+            JOIN sell_lists  ON lot_lists.Id_Lot = sell_lists.Id_Lot
+                                            AND lot_lists.No_Lot = sell_lists.No_Lot
+            JOIN sells ON sell_lists.Id_Sell = sells.Id_Sell
+            LEFT JOIN claim_lists ON claim_lists.Id_Sell = sell_lists.Id_Sell
+                                                        AND claim_lists.No_Sell = sell_lists.No_Sell
+            LEFT JOIN claims on claims.Id_Claim = claim_lists.Id_Claim
+            WHERE sells.`Status` = '0'  and  (STR_TO_DATE(sells.Sell_Date,'%Y-%m-%d') BETWEEN '" . $Sdate . "' AND '" . $Edate . "')  
+            and  (STR_TO_DATE(claims.Claim_Date,'%Y-%m-%d') BETWEEN '" . $Sdate . "' AND '" . $Edate . "')  
+            ) c2 ON c1.Id_Product = c2.Id_Product
+            JOIN categories on categories.Id_Category = c1.Category_Id WHERE categories.Id_Category = '" . $cate . "'
+            GROUP BY c1.Id_Product , c1.Name_Product, categories.Id_Category,categories.Name_Category
+    
+            "));
+
+
+
+            $cates = DB::select(DB::raw("SELECT Id_Category,Name_Category FROM categories 
+            "));
+            return view("report.ReportCostForm")->with('report_costs', $report_costs)->with('cates', $cates);
+            
+        }
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *

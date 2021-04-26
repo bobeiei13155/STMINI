@@ -622,11 +622,11 @@
 
     }
 
-    $(document).on('submit', '.Enter_Sell', function() {
+    // $(document).on('submit', '.Enter_Sell', function() {
 
 
-        alert('wwwww')
-    })
+    //     alert('wwwww')
+    // })
 
 
 
