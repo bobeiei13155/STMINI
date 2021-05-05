@@ -79,35 +79,37 @@ class SellController extends Controller
 
 
                 $premium_payments = DB::select(DB::raw("SELECT Name_Premium_Pro,promotion_payments.Amount_Premium_Pro
-FROM sell_lists 
-JOIN sells on sell_lists.Id_Sell = sells.Id_Sell 
-JOIN payments on payments.Id_Payment = sells.Id_Payment 
-JOIN employees on employees.Id_Emp = sells.Id_Emp 
-LEFT JOIN members on members.Id_Member = sells.Id_Member
-JOIN lot_lists on sell_lists.Id_Lot = lot_lists.Id_Lot and sell_lists.No_Lot = lot_lists.No_Lot 
-JOIN products on lot_lists.Id_Product = products.Id_Product 
- JOIN sell_promo_payments on sell_lists.Id_Sell = sell_promo_payments.Id_Sell and sell_lists.No_Sell = sell_promo_payments.No_Sell
- JOIN promotionpays on sell_promo_payments.Id_Promotion_Payment = promotionpays.Id_Promotion 
- JOIN promotion_payments on promotion_payments.Id_Promotion = promotionpays.Id_Promotion 
-LEFT JOIN premium_pros on premium_pros.Id_Premium_Pro = promotion_payments.Id_Premium_Pro 
-where sell_lists.Id_Sell ='" . $Id_Sell . "'
-"));
+                FROM sell_lists 
+                JOIN sells on sell_lists.Id_Sell = sells.Id_Sell 
+                JOIN payments on payments.Id_Payment = sells.Id_Payment 
+                JOIN employees on employees.Id_Emp = sells.Id_Emp 
+                LEFT JOIN members on members.Id_Member = sells.Id_Member
+                JOIN lot_lists on sell_lists.Id_Lot = lot_lists.Id_Lot and sell_lists.No_Lot = lot_lists.No_Lot 
+                JOIN products on lot_lists.Id_Product = products.Id_Product 
+                JOIN sell_promo_payments on sell_lists.Id_Sell = sell_promo_payments.Id_Sell and sell_lists.No_Sell = sell_promo_payments.No_Sell
+                JOIN promotionpays on sell_promo_payments.Id_Promotion_Payment = promotionpays.Id_Promotion 
+                JOIN promotion_payments on promotion_payments.Id_Promotion = promotionpays.Id_Promotion 
+                LEFT JOIN premium_pros on premium_pros.Id_Premium_Pro = promotion_payments.Id_Premium_Pro 
+                where sell_lists.Id_Sell ='" . $Id_Sell . "'
+                "));
 
                 // dd( $premium_payments); 
                 $premium_products = DB::select(DB::raw("SELECT Name_Premium_Pro,promotion_prods.Amount_Premium_Pro,Amount_Sell*promotion_prods.Amount_Premium_Pro as Amount_Premium_Pro
-FROM sell_lists 
-JOIN sells on sell_lists.Id_Sell = sells.Id_Sell 
-JOIN payments on payments.Id_Payment = sells.Id_Payment 
-JOIN employees on employees.Id_Emp = sells.Id_Emp 
-LEFT JOIN members on members.Id_Member = sells.Id_Member
-JOIN lot_lists on sell_lists.Id_Lot = lot_lists.Id_Lot and sell_lists.No_Lot = lot_lists.No_Lot 
-JOIN products on lot_lists.Id_Product = products.Id_Product 
- JOIN sell_promo_products on sell_lists.Id_Sell = sell_promo_products.Id_Sell and sell_lists.No_Sell = sell_promo_products.No_Sell
- JOIN promotions on sell_promo_products.Id_Promotion_Product = promotions.Id_Promotion 
-LEFT JOIN promotion_prods on promotion_prods.Id_Promotion = promotions.Id_Promotion 
-LEFT JOIN premium_pros on premium_pros.Id_Premium_Pro = promotion_prods.Id_Premium_Pro 
-where sell_lists.Id_Sell ='" . $Id_Sell . "'
-"));
+                FROM sell_lists 
+                JOIN sells on sell_lists.Id_Sell = sells.Id_Sell 
+                JOIN payments on payments.Id_Payment = sells.Id_Payment 
+                JOIN employees on employees.Id_Emp = sells.Id_Emp 
+                LEFT JOIN members on members.Id_Member = sells.Id_Member
+                JOIN lot_lists on sell_lists.Id_Lot = lot_lists.Id_Lot and sell_lists.No_Lot = lot_lists.No_Lot 
+                JOIN products on lot_lists.Id_Product = products.Id_Product 
+                 JOIN sell_promo_products on sell_lists.Id_Sell = sell_promo_products.Id_Sell and sell_lists.No_Sell = sell_promo_products.No_Sell
+                JOIN promotions on sell_promo_products.Id_Promotion_Product = promotions.Id_Promotion 
+                LEFT JOIN promotion_prods on promotion_prods.Id_Promotion = promotions.Id_Promotion 
+                LEFT JOIN premium_pros on premium_pros.Id_Premium_Pro = promotion_prods.Id_Premium_Pro 
+                where sell_lists.Id_Sell ='" . $Id_Sell . "'
+                "));
+
+
 
                 $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
                 $fontDirs = $defaultConfig['fontDir'];
@@ -215,7 +217,7 @@ where sell_lists.Id_Sell ='" . $Id_Sell . "'
 
 
         foreach ($sells as  $row) {
-        
+
             $output .= ' <div class="row ">';
             $output .= ' <div class="input-group col-sm-6 ">';
             $output .= ' <div class="input-group-prepend"> ';
@@ -1024,6 +1026,9 @@ where sell_lists.Id_Sell ='" . $Id_Sell . "'
                 $Id_Sell = "SEL" . "-" . date('Y') . date('m') . "-" . $GenId_Sell;
             }
         }
+    
+        
+
         $Id = session()->get('fname');
         $id_Emp = DB::table('employees')->select('Id_Emp')->where('FName_Emp', "=", "{$Id}")->get();
         $Id_Emp = $id_Emp[0]->Id_Emp;

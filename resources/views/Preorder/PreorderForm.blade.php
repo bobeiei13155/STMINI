@@ -72,21 +72,21 @@
                                     </div>
                                 </div>
                                 <div class="input-group col-sm-1 ">
-                                    
+
                                 </div>
                                 <div class="input-group col-sm-3">
 
                                     <div class="input-group-prepend">
                                         <span class="input-group-text a1" id="inputGroup-sizing-default">วันที่นัดรับ :</span>
                                     </div>
-                                    <?php $today = date_create(date('Y-m-d')) ;
+                                    <?php $today = date_create(date('Y-m-d'));
 
-                                        $today =  date_add($today,date_interval_create_from_date_string("15 days"));
+                                    $today =  date_add($today, date_interval_create_from_date_string("15 days"));
 
-                                        $today = date_format($today,'Y-m-d');
+                                    $today = date_format($today, 'Y-m-d');
 
                                     ?>
-                                    <input type="date" class="form-control" name="date_receipt" id="date_receipt" value="" min="<?php echo $today ?>"  style=" border-radius: 0px 10px 10px 0px;" required>
+                                    <input type="date" class="form-control" name="date_receipt" id="date_receipt" value="" min="<?php echo $today ?>" style=" border-radius: 0px 10px 10px 0px;" required>
 
                                 </div>
 
@@ -304,6 +304,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="container-fluid ">
             <div class="row">
                 <div class="col">
@@ -474,8 +476,96 @@
             </div>
 
         </div>
+        <!-- Modal_Product-->
+        <div id="myModal_Product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+            <div role="document" class="modal-dialog modal-xl">
+                <div class="modal-content" style="width: auto;">
+                    <div class="modal-header">
+                        <h5 id="exampleModalLabel" class="modal-title">สินค้า</h5>
+                        <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
 
-     
+                        <table class="table text-center" id="table_product" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>รหัส</th>
+                                    <th>ชื่อ</th>
+                                    <th>ประเภท</th>
+                                    <th>ยี่ห้อสินค้า</th>
+                                    <th>GEN</th>
+                                    <th>ราคา</th>
+                                    <th>จำนวนสินค้าที่ขายได้</th>
+                                    <th>โปรโมชั่นของแถม</th>
+                                    <th>เลือก</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($products as $product)
+                                <tr>
+                                    <td> {{$product->Id_Product}}
+                                        <input type="hidden" class="Id_Lot" value="{{$product->Id_Lot}}" name="Id_Lot[]">
+                                    </td>
+                                    <td> {{$product->Name_Product}}</td>
+                                    <td>
+                                        @foreach($categories as $category)
+                                        @if($product->Category_Id == $category->Id_Category)
+                                        {{$category->Name_Category}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($brands as $brand)
+                                        @if($product->Brand_Id == $brand->Id_Brand)
+                                        {{$brand->Name_Brand}}
+                                        <input type="hidden" class="Id_Brand_Product " value="{{$product->Brand_Id}}" name="Id_Brand_Product[]">
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach($gens as $gen)
+                                        @if($product->Gen_Id == $gen->Id_Gen)
+                                        {{$gen->Name_Gen}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        {{number_format($product->Price,2)}}
+                                    </td>
+                                    <td>
+                                        @if(($product->Amount_Lot - $product->Amount_Preorder) <= 0) <div style="color:red"> 0<input type="hidden" class="form-control text-center noHover" value=" 0" name="Amount_Sell[]">
+                    </div>
+                    @else
+                    {{$product->Amount_Lot - $product->Amount_Preorder}}
+                    <input type="hidden" class="form-control text-center noHover" value="{{$product->Amount_Lot - $product->Amount_Preorder}}" name="Amount_Sell[]">
+                    @endif
+
+
+                    </td>
+                    <td>
+                        @foreach($promotions as $promotion)
+                        @if($product->Id_Product == $promotion->Id_Product)
+                        <button type="button" class="btn btn-warning ID_Promotion_Product " id="{{$promotion->Id_Promotion}} " style="border-radius: 5px;  " data-toggle="modal" data-target="#myModal_Promotion_De_1"> <i class="fas fa-eye"></i></button>
+                        <input type="hidden" value="{{$promotion->Id_Promotion}} " name="Id_Promotion_Product_inp[]">
+                        <input type="hidden" value="{{$product->Price}} " name="Price_Product[]">
+                        @endif
+                        @endforeach
+                    </td>
+
+
+
+                    <td> <button type="button" class="btn btn-primary buttonID_Product" id="{{$product->Id_Product}}" style="border-radius: 5px; width: 120px; " data-toggle="modal" data-target="#myModalOffer"> <i class="fas fa-cart-arrow-down" style="margin-right: 5px;"></i> เลือกสินค้า</button></td>
+                    <input type="hidden" value="{{$product->Price}} " name="Price_Product[]">
+                    </tr>
+                    @endforeach
+
+                    </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
     </form>
 </section>
 

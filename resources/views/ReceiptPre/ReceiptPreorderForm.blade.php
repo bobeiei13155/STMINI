@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <!-- Page Header-->
             <header>
-                <h1 class="h1 display">สั่งจองสินค้า</h1>
+                <h1 class="h1 display">รับสินค้าสั่งจอง</h1>
             </header>
             <textarea id="chk_Payment" name="chk_Payment" rows="10" hidden>
 

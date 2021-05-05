@@ -46,6 +46,7 @@
               <th>วันที่สั่งซื้อ</th>
               <th>ยอดรวม</th>
               <th>สถานะ</th>
+              <th>พิมพ์ใบสั่งซื้อสินค้า</th>
             </tr>
           </thead>
           <tbody>
@@ -71,12 +72,14 @@
               {{number_format($order->Total_Price,2)}}
               </td>
               <td>
-                @if( $order->Status_Order == 0)
+                @if($order->Status_Order == 1)
                 สั่งซื้อแล้ว
                 @endif
 
               </td>
-
+              <td>
+                <a type="button" href="/Order/OrderBill/{{$order->Id_Order}}" class="col-auto btn btn-info " style="border-radius: 5px; width: 140px; " target="_blank"> <i class="fas fa-print" style="margin-right: 5px;"></i> พิมพ์ </a>
+              </td>
             </tr>
             @endforeach
 

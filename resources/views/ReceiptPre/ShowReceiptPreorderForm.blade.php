@@ -42,12 +42,12 @@
                   
                 <a href="/ReceiptPre/receipt_preorder/{{$preorder->Id_Preorder}}" class="btn btn-info" style="border-radius: 5px; width: 100px; "> <i class="fas fa-pen" style="margin-right: 5px;"></i>รับสินค้า</a>
               </td>
-              @else{
+              @else
                 <td>
                   
                 รับสินค้าแล้ว
                 </td>
-              }
+              
               @endif
             </tr>
             @endforeach

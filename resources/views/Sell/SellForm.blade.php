@@ -63,7 +63,7 @@
                                         <label for="radioCustom2">ลูกค้าสมาชิก</label>
                                     </div>
                                 </div>
-    
+
                                 <div class="input-group col-sm-3">
                                     <input type="text" class="form-control a1 text-center" id="member" name="member" value="" placeholder="--->ชื่อลูกค้าสมาชิก<---" style="color:#495057 ;background-color: #E8ECEE; border-radius: 10px 0px 0px 10px;" disabled>
                                     <input type="hidden" class="form-control " id="id_member" name="id_member" value="">
@@ -434,6 +434,44 @@
 
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="input-group col-sm-5 ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">vat 7 % :</span>
+                                    </div>
+                                    <input type="text" class="form-control text-center vat " value="0.00" name="vat" id="vat" style="background-color: #E8ECEE; height:40px " readonly>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 ">
+
+                                </div>
+                                <div class="col-sm-4">
+
+
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-sm-5 ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="width:130px">ราคาถอดvat :</span>
+                                    </div>
+                                    <input type="text" class="form-control text-center vat1 " value="0.00" name="vat1" id="vat1" style="background-color: #E8ECEE; height:40px " readonly>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text a1" id="inputGroup-sizing-default" style="background-color: #c1c1c1;color:black; border-radius: 0px 10px 10px 0px;"> บาท</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 ">
+
+                                </div>
+                                <div class="col-sm-4">
+
+
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -588,6 +626,8 @@
 
 
 
+
+
     function confirmalert(e) {
         e.preventDefault();
         var frm = e.target.form;
@@ -657,6 +697,37 @@
             // console.log(Member_Pay_con + 'ยังไม่ครบ');
 
         }
+
+        // alert(payment);
+    });
+
+
+    $("#payment").on("change", function() {
+        var payment = $("#payment").val();
+        // var ret = "data-123".replace('data-','');
+        var payment_re = payment.replace(',', '');
+
+        var payment_con = parseFloat(payment_re);
+        alert(payment);
+
+
+        // $('input[name="vat"]').val(payment_con);
+
+        // console.log(payment_con);
+        // console.log(Member_Pay_con);
+
+        // if (payment_con <= Member_Pay_con) {
+        //     // document.getElementById('Enter_Sell').disabled = true;
+        //     var coin = Member_Pay_con - payment_con;
+
+        //     $(':input[type="submit"]').prop('disabled', false);
+        //     // console.log(coin + 'เงินทอน');
+        //     $('#coin').val(coin);
+        // } else {
+        //     $(':input[type="submit"]').prop('disabled', true);
+        //     // console.log(Member_Pay_con + 'ยังไม่ครบ');
+
+        // }
 
         // alert(payment);
     });
@@ -772,6 +843,7 @@
 
 
 
+
     function sumTotal() {
         var total_ = 0;
         $('.total_cost').each(function() {
@@ -798,10 +870,24 @@
 
         var payment_show = payment_ - ((payment_ * discount_member_) / 100);
         payment_show = Math.ceil(payment_show);
+
+        vat = ((payment_ * 0.07));
+        vat1 = ((payment_ - (payment_) * 0.07));
+        document.getElementById("vat").value = vat.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+        document.getElementById("vat1").value = vat1.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
         // var Id_Brand = test.find("input[name='Id_Brand[]']").val();
         // alert(Id_Brand);
         var Id_Brand_chk = "";
         var total_chk = "";
+
+
+
 
         $('.Id_Brand').each(function() {
             band.push($(this).val());
@@ -973,11 +1059,15 @@
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                         }));
+
+
                         let payment_ = sumPayment();
                         $('#payment').val(payment_.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                         }));
+
+
 
                     }
                 });
@@ -1051,6 +1141,7 @@
 
 
     });
+
 
 
 

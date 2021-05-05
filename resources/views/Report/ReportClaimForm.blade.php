@@ -120,7 +120,7 @@
     // Define the chart to be drawn.
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Element');
-    data.addColumn('number', 'Percentage');
+    data.addColumn('number', 'สินค้าเคลม');
     data.addRows([
       @foreach($reportclaims as $row)[
         '{{ $row->Name_Product }}', {{$row->Amount_Claim}}

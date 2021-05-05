@@ -240,7 +240,7 @@ class PartnerController extends Controller
         $costs = DB::table('costs')
             ->join('products', 'products.Id_Product', '=', 'costs.Id_Product')
             ->select('products.Name_Product', 'costs.Cost', 'products.Id_Product')
-            ->where('Id_Partner', $Id_Partner)->get();
+            ->where('Id_Partner', $Id_Partner)->where('costs.Status','=','0')->get();
 
         // echo"<pre>";
         // print_r($telemps);
@@ -289,14 +289,16 @@ class PartnerController extends Controller
         $partner->save();
 
         if ($datacost != []) {
-            costs::destroy([$datacost]);
+           
             foreach ($request['cost'] as $item => $value) {
                 $request3 = array(
                     'Id_Partner' => $Id_Partner,
                     'Id_Product' => $request['Id_Product'][$item],
                     'Cost' => $request['cost'][$item]
                 );
+                DB::statement("UPDATE `stminidb`.`costs` SET `Status` = '1' WHERE `Id_Partner` = '".$Id_Partner."' AND `Id_Product` = '".$request['Id_Product'][$item]."' ");
                 costs::create($request3);
+            
             }
         } else {
             foreach ($request['cost'] as $item => $value) {

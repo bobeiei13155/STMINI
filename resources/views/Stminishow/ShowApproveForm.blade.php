@@ -8,7 +8,7 @@
       <form action="#" method="GET" enctype="multipart/form-data">
         <div class="row">
           <div class="col">
-            <h1 class="h1">ข้อมูลใบอนุมัติสั่งซื้อสินค้า</h1>
+            <h1 class="h1">อนุมัติสั่งซื้อสินค้า</h1>
           </div>
 
         
@@ -60,17 +60,25 @@
               <td>
                 {{$offer->Offer_date}}
               </td>
-              <td>
+              
                 @if( $offer->Status_Offer == 0)
+                <td>
                 ยังไม่พิจารณา
+                <td>
+                <a href="/Stminishow/ApproveOffer/{{$offer->Id_Offer}}" class="btn btn-info" style="border-radius: 5px; width: 110; "> <i class="fas fa-pen" style="margin-right: 5px;"></i> อนุมัติ</a>
+              </td>
+                </td>
                 @else
+                <td>
                 พิจารณาแล้ว
+                </td>
+                <td>
+                <input class="btn btn-info" style="border-radius: 5px; width: 110px; " value="อนุมัติแล้ว" disabled>   </input>
+              </td>
                 @endif
 
-              </td>
-              <td>
-                <a href="/Stminishow/ApproveOffer/{{$offer->Id_Offer}}" class="btn btn-info" style="border-radius: 5px; width: 90px; "> <i class="fas fa-pen" style="margin-right: 5px;"></i> อนุมัติ</a>
-              </td>
+          
+           
             </tr>
             @endforeach
 

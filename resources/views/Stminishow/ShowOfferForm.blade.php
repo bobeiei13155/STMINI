@@ -45,7 +45,7 @@
               <th>วันที่เสนอ</th>
               <th>สถานะ</th>
               <th>ดูรายละเอียด</th>
-              <th>ลบ</th>
+      
             </tr>
           </thead>
           <tbody>
@@ -74,9 +74,6 @@
               </td>
               <td>
                 <button type="button" data-toggle="modal" data-target="#myModal" class="col-auto btn btn-warning buttonID" style="border-radius: 5px; width: 140px; " id="{{$offer->Id_Offer}}"> <i class="fas fa-eye" style="margin-right: 5px;"></i> ดูรายละเอียด </button>
-              </td>
-              <td>
-                <a href="#" onclick="return confirm('คุณต้องการลบข้อมูลหรือไม่ ?')" class="btn btn-danger" style="border-radius: 5px; width: 90px; "> <i class="fas fa-trash" style="margin-right: 5px;"></i> ลบ</a>
               </td>
             </tr>
             @endforeach

@@ -45,9 +45,78 @@
                                 <div class="col-sm-3">
                                     <input type="date" class="form-control" name="Offer_date" id="Offer_date" required>
                                 </div>
-
+                                <div class="col-sm-2">
+                                    <button type="button" data-toggle="modal" data-target="#myModal_Product" class="col-auto btn btn-info  float-right"> <i class="fas fa-shopping-bag" style="margin-right: 5px;"></i> สินค้าต่ำกว่าจุดสั่งซื้อ </button>
+                                </div>
                                 <div class="col">
                                     <button type="button" data-toggle="modal" data-target="#myModal" class="col-auto btn btn-primary  float-right"> <i class="fas fa-shopping-bag" style="margin-right: 5px;"></i> เลือกสินค้า </button>
+                                </div>
+                            </div>
+                            <!-- Modal-->
+                            <div id="myModal_Product" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+                                <div role="document" class="modal-dialog modal-lg">
+                                    <div class="modal-content" style="width: auto;">
+                                        <div class="modal-header">
+                                            <h5 id="exampleModalLabel" class="modal-title">สินค้าต่ำกว่าจุดสั่งซื้อ</h5>
+                                            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <table class="table text-center" id="table_product_s" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ชื่อสินค้า</th>
+                                                        <th>ประเภทสินค้า</th>
+                                                        <th>ยี่ห้อสินค้า</th>
+                                                        <th>GEN</th>
+                                                        <th>สินค้าต่ำกว่าจุดสั่งซื้อ</th>
+                                                        <th>สินค้าในคลัง</th>
+                                                        <th>เลือกสินค้า</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($product_s as $product_)
+                                                    <tr>
+                                                        <td>{{$product_->Name_Product}}</td>
+                                                        <td>
+
+                                                            {{$product_->Name_Category}}
+
+                                                        </td>
+                                                        <td>
+
+                                                            {{$product_->Name_Brand}}
+
+                                                        </td>
+                                                        <td>
+
+                                                            {{$product_->Name_Gen}}
+
+                                                        </td>
+                                                        <td>
+                                                            {{$product_->Purchase}}
+                                                        </td>
+                                                        @if($product_->Purchase >= $product_->Amount_Lot)
+                                                            <td style="color:red">
+
+                                                                {{$product_->Amount_Lot}}
+
+                                                            </td>
+                                                            @else
+                                                            <td >
+
+                                                                {{$product_->Amount_Lot}}
+
+                                                            </td>
+                                                            @endif
+                                                            <td> <button type="button" class="btn btn-primary buttonID" id="{{$product_->Id_Product}}" style="border-radius: 5px; width: 120px; " data-toggle="modal" data-target="#myModalOffer"> <i class="fas fa-cart-arrow-down" style="margin-right: 5px;"></i> เลือกสินค้า</button></td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Modal-->
@@ -193,7 +262,7 @@
                                 <tr>
                                     <td> {{$Preorder->Name_Product}}</td>
                                     <td> <input type="text" class="form-control text-center Amount_Preorder" value="{{$Preorder->Amount_Preorder}}" name="Amount_Preorder[]" disabled>
-                                      
+
                                     </td>
                                     <td> <button type="button" class="btn btn-info buttonID_Preorder" id="{{$Preorder->Id_Product}}" data-toggle="modal" data-target="#myModalPreorder" style="border-radius: 5px; width: 120px; "> <i class="fas fa-cart-arrow-down" style="margin-right: 5px;"></i> เลือกสินค้า</button></td>
                                 </tr>
@@ -241,6 +310,12 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#table').DataTable({
+            "lengthMenu": [
+                [5, 10, 50, -1],
+                [5, 10, 50, "All"]
+            ]
+        });
+        $('#table_product_s').DataTable({
             "lengthMenu": [
                 [5, 10, 50, -1],
                 [5, 10, 50, "All"]

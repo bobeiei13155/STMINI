@@ -159,8 +159,16 @@ class OfferController extends Controller
 
                 // dd($query);
 
+                $product_s = DB::select(DB::raw("SELECT products.Id_Product,Name_Product,IFNULL (sum(Amount_Lot),0) as Amount_Lot,Purchase,Name_Brand,Name_Category,Name_Gen from products 
+LEFT  JOIN lot_lists on  lot_lists.Id_Product = Products.Id_Product
+  JOIN brands on  brands.Id_Brand = products.Brand_Id
+  JOIN categories on  categories.Id_Category = Products.Category_Id
+  JOIN gens on  gens.Id_Gen = Products.Gen_Id
+GROUP BY products.Id_Product,Name_Product,Purchase,Name_Brand,Name_Category,Name_Gen
+"));
 
-                return view('Stminishow.OfferForm')->with('Preorder', $query)->with('products', $products)->with('gens', $gens)->with('Preorders', $Preorders)
+                // dd($product_s);
+                return view('Stminishow.OfferForm')->with('Preorder', $query)->with('products', $products)->with('gens', $gens)->with('Preorders', $Preorders)->with('product_s', $product_s)
                     ->with('brands', $brands)
                     ->with('patterns', $patterns)
                     ->with('colors', $colors)
@@ -527,7 +535,7 @@ class OfferController extends Controller
         if (session()->has('login')) {
             if (session()->has('loginpermission8')) {
 
-                $offers = DB::table('offers')->get();
+                $offers = DB::table('offers')->orderBy('Id_Offer','DESC')->get();
                 $employees = DB::table('employees')->select('Id_Emp', 'Fname_Emp')->get();
                 return view('Stminishow.ShowApproveForm')->with('offers', $offers)->with('employees', $employees);
             } else {

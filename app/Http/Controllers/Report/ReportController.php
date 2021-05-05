@@ -31,17 +31,19 @@ class ReportController extends Controller
                 IFNULL(SUM(y2.Total_Price * (y2.yymm='2021-09'))  , 0.00)as Sep,
                 IFNULL(SUM(y2.Total_Price * (y2.yymm='2021-10'))  , 0.00)as Oct,
                 IFNULL(SUM(y2.Total_Price * (y2.yymm='2021-11'))  , 0.00)as Nov,
-                IFNULL(SUM(y2.Total_Price * (y2.yymm='2021-12')),0.00) as 'Dec'
-                
+                IFNULL(SUM(y2.Total_Price * (y2.yymm='2021-12')),0.00) as 'Dec',
+                IFNULL(SUM(y2.Total_Price * (y2.yy='2021')) , 0.00) as Sum1 
+         
                 FROM products as y1
                 LEFT JOIN
                 (
-                SELECT sell_lists.Id_Sell , sell_lists.No_Sell , products.Id_Product , sum(sell_lists.Total_Price)as Total_Price , sells.Sell_Date , SUBSTR(sells.Sell_Date,1,7) as yymm 
+                SELECT sell_lists.Id_Sell , sell_lists.No_Sell , products.Id_Product , sum(sell_lists.Total_Price)as Total_Price , sells.Sell_Date , SUBSTR(sells.Sell_Date,1,7) as yymm ,
+                SUBSTR(sells.Sell_Date,1,4) as yy
                 FROM sell_lists 
                 JOIN sells  ON sells.Id_Sell = sell_lists.Id_Sell
                 JOIN lot_lists on sell_lists.Id_Lot = lot_lists.Id_Lot and lot_lists.No_Lot  = sell_lists.No_Lot
                 RIGHT JOIN   products on products.Id_Product = lot_lists.Id_Product
-                GROUP BY products.Id_Product ,sell_lists.Id_Sell , sell_lists.No_Sell , products.Id_Product ,  sells.Sell_Date ,yymm 
+                GROUP BY products.Id_Product ,sell_lists.Id_Sell , sell_lists.No_Sell , products.Id_Product ,  sells.Sell_Date ,yymm ,yy
                 )y2 ON y1.Id_Product = y2.Id_Product
                 WHERE y1.`Status` = '0'
                 GROUP BY y1.Id_Product,y1.Id_Product , y1.Name_Product
@@ -69,7 +71,7 @@ class ReportController extends Controller
         $Year = $request->year;
         // dd($Year);
         $costtap = DB::select(DB::raw("SELECT y1.Id_Product , y1.Name_Product  ,
-        IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-01')) ,0.00) as Jan,
+        IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-01')) , 0.00) as Jan,
         IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-02')) , 0.00) as Feb,
         IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-03')) , 0.00)as Mar,
         IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-04')) , 0.00)as Apr,
@@ -80,16 +82,17 @@ class ReportController extends Controller
         IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-09'))  , 0.00)as Sep,
         IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-10'))  , 0.00)as Oct,
         IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-11'))  , 0.00)as Nov,
-        IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-12')),0.00) as 'Dec'
-        
+        IFNULL(SUM(y2.Total_Price * (y2.yymm='" . $Year . "-12')) , 0.00) as 'Dec',
+      
         FROM products as y1
         LEFT JOIN
         (
-        SELECT sell_lists.Id_Sell , sell_lists.No_Sell , products.Id_Product , sum(sell_lists.Total_Price)as Total_Price , sells.Sell_Date , SUBSTR(sells.Sell_Date,1,7) as yymm 
+        SELECT sell_lists.Id_Sell , sell_lists.No_Sell , products.Id_Product , sum(sell_lists.Total_Price)as Total_Price , sells.Sell_Date , SUBSTR(sells.Sell_Date,1,7) as yymm ,
+        
         FROM sell_lists 
         JOIN sells  ON sells.Id_Sell = sell_lists.Id_Sell
         JOIN lot_lists on sell_lists.Id_Lot = lot_lists.Id_Lot and lot_lists.No_Lot  = sell_lists.No_Lot
-        RIGHT JOIN   products on products.Id_Product = lot_lists.Id_Product
+        RIGHT JOIN   products on products.Id_Product = lot_lists.Id_Product 
         GROUP BY products.Id_Product ,sell_lists.Id_Sell , sell_lists.No_Sell , products.Id_Product ,  sells.Sell_Date ,yymm 
         )y2 ON y1.Id_Product = y2.Id_Product
         WHERE y1.`Status` = '0'
@@ -112,6 +115,7 @@ class ReportController extends Controller
             $output .= ' <td>' . number_format($row->Oct, 2) . '</td>';
             $output .= '<td>' . number_format($row->Nov, 2) . '</td>';
             $output .= '<td>' . number_format($row->Dec, 2) . '</td>';
+            $output .= '<td>' . number_format($row->Sum1, 2) . '</td>';
             $output .= '</tr>';
         }
 
@@ -135,8 +139,7 @@ class ReportController extends Controller
                 LEFT JOIN 
                 (
                 SELECT lot_lists.Id_Lot , lot_lists.No_Lot , lot_lists.Id_Product , lot_lists.Cost ,
-                sell_lists.Id_Sell , sell_lists.No_Sell , sell_lists.Amount_Sell , sell_lists.Total_Price , IFNULL(claim_lists.Amount_Claim,0) as Amount_Claim ,
-                sell_lists.Total_Price - (lot_lists.Cost * sell_lists.Amount_Sell) as profit 
+                sell_lists.Id_Sell , sell_lists.No_Sell , sell_lists.Amount_Sell , sell_lists.Total_Price , IFNULL(claim_lists.Amount_Claim,0) as Amount_Claim 
                 FROM lot_lists
                 JOIN sell_lists  ON lot_lists.Id_Lot = sell_lists.Id_Lot
                                                 AND lot_lists.No_Lot = sell_lists.No_Lot

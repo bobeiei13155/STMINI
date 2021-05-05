@@ -17,7 +17,7 @@
                 {{csrf_field()}}
                 <div class="row">
                     <div class="col">
-                        <h1 class="h1">ข้อมูลประเภทลูกค้า</h1>
+                        <h1 class="h1">ข้อมูลประเภทชำระเงิน</h1>
                     </div>
                     <div class="col-sm-2">
                         <div class="input-group mb-3">

@@ -57,14 +57,30 @@
       <!-- Sidebar Navigation Menus-->
       <div class="main-menu">
         <h5 class="sidenav-heading">Main</h5>
+        @if (session()->has('loginpermission1') || session()->has('loginpermission2'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#employeeDropdown" aria-expanded="false" data-toggle="collapse"> <i class="far fa-address-card"></i>ข้อมูลพนักงาน</a>
             <ul id="employeeDropdown" class="collapse list-unstyled ">
+
+              @if (session()->has('loginpermission1'))
               <li><a href="/Stminishow/showEmployee">ข้อมูลพนักงาน</a></li>
+              @else
+              <li></li>
+              @endif
+              @if (session()->has('loginpermission2'))
               <li><a href="/Stminishow/showPosition">ข้อมูลตำแหน่ง</a></li>
+              @else
+              <li></li>
+              @endif
+
+
             </ul>
           </li>
         </ul>
+        @else
+
+        @endif
+        @if (session()->has('loginpermission3'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#prodectDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-shopping-basket"></i>ข้อมูลสินค้า</a>
             <ul id="prodectDropdown" class="collapse list-unstyled ">
@@ -78,6 +94,9 @@
             </ul>
           </li>
         </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission4'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#partnerDropdown" aria-expanded="false" data-toggle="collapse"> <i class="far fa-handshake"></i>ข้อมูลบริษัทคู่ค้า</a>
             <ul id="partnerDropdown" class="collapse list-unstyled ">
@@ -85,6 +104,9 @@
             </ul>
           </li>
         </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission5'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#memberDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-users"></i>ข้อมูลลูกค้า</a>
             <ul id="memberDropdown" class="collapse list-unstyled ">
@@ -94,6 +116,9 @@
             </ul>
           </li>
         </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission6'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#promotionDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-gift"></i>ข้อมูลโปรโมชั่น</a>
             <ul id="promotionDropdown" class="collapse list-unstyled ">
@@ -102,6 +127,9 @@
             </ul>
           </li>
         </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission7'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#PremiumProDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-shopping-bag"></i>ข้อมูลของแถม</a>
             <ul id="PremiumProDropdown" class="collapse list-unstyled ">
@@ -109,23 +137,33 @@
             </ul>
           </li>
         </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission8')||session()->has('loginpermission9')||session()->has('loginpermission10'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#OrderDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-truck"></i>สั่งซื้อสินค้า</a>
             <ul id="OrderDropdown" class="collapse list-unstyled ">
+              @if (session()->has('loginpermission8'))
               <li> <a href="/Stminishow/ShowOffer">เสนอสั่งซื้อสินค้า</a></li>
+              @else
+              <li></li>
+              @endif
+              @if (session()->has('loginpermission9'))
               <li> <a href="/Stminishow/ShowApprove">อนุมัติสั่งซื้อสินค้า</a></li>
+              @else
+              <li></li>
+              @endif
+              @if (session()->has('loginpermission10'))
               <li> <a href="/Order/ShowOrder">สั่งซื้อสินค้า</a></li>
+              @else
+              <li></li>
+              @endif
             </ul>
           </li>
         </ul>
-        <ul id="side-main-menu" class="side-menu list-unstyled">
-          <li><a href="#PreOrderDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-store"></i>สั่งจองสินค้า</a>
-            <ul id="PreOrderDropdown" class="collapse list-unstyled ">
-              <li> <a href="/Preorder/ShowPreOrder">สั่งจองสินค้า</a></li>
-              <li> <a href="/ReceiptPre/ShowReceiptPre">รับสินค้าสั่งจอง</a></li>
-            </ul>
-          </li>
-        </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission11'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#ReceiveDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-cart-arrow-down"></i>รับสินค้า</a>
             <ul id="ReceiveDropdown" class="collapse list-unstyled ">
@@ -134,16 +172,42 @@
             </ul>
           </li>
         </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission12'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#sellprodectDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-cash-register"></i>ขายสินค้า</a>
             <ul id="sellprodectDropdown" class="collapse list-unstyled ">
-           
+
 
               <li> <a href="/Sell/ShowSell">ขายสินค้า</a></li>
 
             </ul>
           </li>
         </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission13')||session()->has('loginpermission14'))
+        <ul id="side-main-menu" class="side-menu list-unstyled">
+          <li><a href="#PreOrderDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-store"></i>สั่งจองสินค้า</a>
+            <ul id="PreOrderDropdown" class="collapse list-unstyled ">
+              @if (session()->has('loginpermission13'))
+              <li> <a href="/Preorder/ShowPreOrder">สั่งจองสินค้า</a></li>
+              @else
+              <li></li>
+              @endif
+              @if (session()->has('loginpermission14'))
+
+              <li> <a href="/ReceiptPre/ShowReceiptPre">รับสินค้าสั่งจอง</a></li>
+              @else
+              <li></li>
+              @endif
+            </ul>
+          </li>
+        </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission15'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#ClaimDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-tools"></i>เคลมสินค้า</a>
             <ul id="ClaimDropdown" class="collapse list-unstyled ">
@@ -151,6 +215,9 @@
             </ul>
           </li>
         </ul>
+        @else
+        @endif
+        @if (session()->has('loginpermission16'))
         <ul id="side-main-menu" class="side-menu list-unstyled">
           <li><a href="#ReportDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fas fa-chart-bar"></i>ออกรายงาน</a>
             <ul id="ReportDropdown" class="collapse list-unstyled ">
@@ -163,6 +230,8 @@
             </ul>
           </li>
         </ul>
+        @else
+        @endif
       </div>
     </div>
   </nav>

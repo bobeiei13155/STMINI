@@ -214,7 +214,7 @@ Route::get('/Order/ShowOrder', 'Order\OrderController@Showorder'); //ทำส�
 Route::get('/Order/createOrder', 'Order\OrderController@createOrder'); //ทำสิทธิ์แล้ว
 Route::post('/Order/createOrder/select_order', 'Order\OrderController@select_order')->name('order.select_order');
 Route::post('/Order/storeOrder', 'Order\OrderController@storeOrder');
-
+Route::get('/Order/OrderBill/{Id_Order}', 'Order\OrderController@OrderBill');
 
 Route::get('/Receipt/ShowReceipt', 'Receipt\ReceiptController@ShowReceipt');
 Route::get('/Receipt/createReceipt', 'Receipt\ReceiptController@createReceipt'); //ทำสิทธิ์แล้ว

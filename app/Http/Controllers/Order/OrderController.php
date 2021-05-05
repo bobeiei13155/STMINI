@@ -25,7 +25,7 @@ class OrderController extends Controller
                     ->join('order_lists', 'orders.Id_Order', '=', 'order_lists.Id_Order')
                     ->join('employees', 'employees.Id_Emp', '=', 'orders.Id_Emp')
                     ->select('orders.Id_Order', 'orders.Order_Date', 'orders.Status_Order', 'orders.Id_Emp', 'employees.FName_Emp', 'orders.Total_Price', 'order_lists.Id_Partner')
-                    ->where('Status_Order', '=', 0)->groupBy('orders.Id_Order', 'orders.Id_Order', 'orders.Status_Order', 'orders.Order_Date', 'employees.FName_Emp', 'orders.Id_Emp', 'orders.Total_Price', 'order_lists.Id_Partner')->get();
+                    ->where('Status_Order', '=', 1)->groupBy('orders.Id_Order', 'orders.Id_Order', 'orders.Status_Order', 'orders.Order_Date', 'employees.FName_Emp', 'orders.Id_Emp', 'orders.Total_Price', 'order_lists.Id_Partner')->get();
 
                 $partners = DB::table('partners')->select('Id_Partner', 'Name_Partner')->get();
                 // dd($partners);
@@ -45,7 +45,7 @@ class OrderController extends Controller
                 //     ->join('products', 'products.Id_Product', '=', 'costs.Id_Product')
                 //     ->where('Status_Approve', '=', 1)
                 //     ->groupBy('offer_costs.Id_Partner', 'partners.Name_Partner')->get();
-
+                // dd($orders);
                 return view("Order.ShowOrderForm")->with('orders', $orders)->with('partners', $partners);
             } else {
                 Session()->flash("echo", "คุณไม่มีสิทธิ์");
@@ -56,6 +56,79 @@ class OrderController extends Controller
             return redirect('/login');
         }
     }
+
+    public function OrderBill($Id_Order)
+    {
+        Session()->forget("echo", "คุณไม่มีสิทธิ์");
+        if (session()->has('login')) {
+            if (session()->has('loginpermission10')) {
+
+
+                $orders =  DB::table('orders')
+                    ->join('order_lists', 'orders.Id_Order', '=', 'order_lists.Id_Order')
+                    ->join('employees', 'employees.Id_Emp', '=', 'orders.Id_Emp')
+                    ->select('orders.Id_Order', 'orders.Order_Date', 'orders.Status_Order', 'orders.Id_Emp', 'employees.FName_Emp', 'orders.Total_Price', 'order_lists.Id_Partner')
+                    ->where('Status_Order', '=', 1)->where('orders.Id_Order', '=', $Id_Order)
+                    ->groupBy('orders.Id_Order', 'orders.Id_Order', 'orders.Status_Order', 'orders.Order_Date', 'employees.FName_Emp', 'orders.Id_Emp', 'orders.Total_Price', 'order_lists.Id_Partner')->get();
+
+
+
+
+
+                foreach ($orders as $row) {
+                    $Id_Partner = $row->Id_Partner;
+                }
+
+                $partners = DB::table('partners')->select('Id_Partner', 'Name_Partner')->where('Id_Partner', '=', $Id_Partner)->get();
+                // dd($partners);
+
+                $address = DB::select(DB::raw("SELECT partners.Address_Partner,amphur.AMPHUR_ID,AMPHUR_NAME,district.DISTRICT_ID,DISTRICT_NAME,province.PROVINCE_ID,PROVINCE_NAME,amphur.POSTCODE FROM partners 
+                JOIN province on province.PROVINCE_ID = partners.Province_Id
+                JOIN amphur on amphur.AMPHUR_ID = partners.District_Id
+                JOIN district on district.DISTRICT_ID = partners.Subdistrict_Id WHERE partners.Id_Partner = '" . $Id_Partner . "'"));
+
+                // dd($address);
+                $products = DB::select(DB::raw("SELECT No_Order,Name_Product,Amount_Order,Cost,(Amount_Order*Cost) as Total  FROM order_lists 
+                JOIN products on products.Id_Product  = order_lists.Id_Product 
+                JOIN offer_costs on offer_costs.Id_Offer = order_lists.Id_Offer and offer_costs.No_Offer = order_lists.No_Offer
+                 WHERE order_lists.Id_Order = '" . $Id_Order . "'
+                 and offer_costs.Status_Approve = 2
+                  " ));
+                $employees = DB::table('employees')->select('Id_Emp', 'FName_Emp')->get();
+                $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+                $fontDirs = $defaultConfig['fontDir'];
+                $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+                $fontData = $defaultFontConfig['fontdata'];
+                $html = view('Order.Show_OrderBillForm')->with('orders', $orders)->with('products', $products)
+                ->with('partners', $partners)->with('employees', $employees)->with('address', $address)
+                    ->render();
+                $mpdf = new \Mpdf\Mpdf([
+                    'fontDir' => array_merge($fontDirs, [
+                        storage_path('fonts/'),
+                    ]),
+                    'fontdata' => $fontData + [
+                        'sarabun_new' => [
+                            'R' => 'THSarabunNew.ttf',
+                            'I' => 'THSarabunNew Italic.ttf',
+                            'B' => 'THSarabunNew Bold.ttf',
+                        ],
+                    ],
+                    'default_font' => 'sarabun_new',
+
+                ]);
+                $mpdf->WriteHTML($html);
+                $mpdf->Output();
+                return $mpdf->Output();
+            } else {
+                Session()->flash("echo", "คุณไม่มีสิทธิ์");
+                return view('layouts.stmininav');
+            }
+        } else {
+
+            return redirect('/login');
+        }
+    }
+
     public function createOrder()
     {
         Session()->forget("echo", "คุณไม่มีสิทธิ์");
@@ -94,7 +167,7 @@ class OrderController extends Controller
                 foreach ($orders as $item => $value) {
                     array_push($arr1, $value->Id_Partner);
                 }
-             
+
                 // dd($orders);
                 $Id_Partner_J = DB::table('offer_costs')
 

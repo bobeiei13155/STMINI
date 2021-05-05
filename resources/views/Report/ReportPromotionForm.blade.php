@@ -190,7 +190,7 @@
     // Define the chart to be drawn.
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Element');
-    data.addColumn('number', 'Percentage');
+    data.addColumn('number', 'โปรโมชั่นยอดชำระ');
     data.addRows([
     @foreach($reportpromotions as $reportpromotion)[
         '{{ $reportpromotion->Name_Promotion }}', {{$reportpromotion->Count_Payment}}
@@ -224,7 +224,7 @@
     // Define the chart to be drawn.
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Element');
-    data.addColumn('number', 'Percentage');
+    data.addColumn('number', 'โปรโมชั่นของแถม');
     data.addRows([
  
       @foreach($reportpromotion_products as $reportpromotion_product)[

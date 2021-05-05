@@ -51,6 +51,11 @@
 
       </form>
       <div class="card">
+        <center>
+          <div id="piechart_promotion" style="width: 900px; height: 500px; ">
+
+          </div>
+        </center>
         <div class="card-body text-center  Show_Report_Sell">
           <table class="table table-striped table-hover" id="table_show">
             <thead>
@@ -76,6 +81,7 @@
       </div>
     </div>
 </section>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
   $(document).ready(function() {
     $('#table_show').DataTable();
@@ -101,5 +107,36 @@
     document.getElementById("Edate").min = Sdate;
 
   })
+
+
+
+
+  function drawVisualization() {
+  // Create and populate the data table.
+  var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Element');
+    data.addColumn('number', 'การขายสินค้า');
+    data.addRows([
+      @foreach($report_costs as $row)[
+        '{{ $row->Name_Product }}', {{$row->profit_real}}
+      ],
+      @endforeach
+    ]);
+
+  // Create and draw the visualization.
+  new google.visualization.ColumnChart(document.getElementById('piechart_promotion')).
+      draw(data,
+           {title:"กำไร/ขาดทุน",
+       
+           }
+      );
+}
+
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(drawVisualization);
+
+
+
+
 </script>
 @endsection
